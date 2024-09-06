@@ -12,6 +12,11 @@ const Login = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     await fetchApiLogin();
+    const trimmedPassword = password.replace(/\s+/g, ''); 
+    if (trimmedPassword.length < 5) {
+      setErrorMess('Password must be at least 5 characters long (excluding spaces)');
+      return;
+    }
   };
 
   const fetchApiLogin = async () => {
