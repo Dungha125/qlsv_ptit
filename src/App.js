@@ -1,12 +1,19 @@
 
+import React from 'react';
 import './App.css';
-import Login from './component/Login';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './component/Login.jsx'; 
+import Home from './component/Home.jsx';   
+
 
 function App() {
   return (
-    <div className="w-full h-full">
-      <Login/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 

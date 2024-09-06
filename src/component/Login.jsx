@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { logologin, backlogin } from '../assets';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMess, setErrorMess] = useState('');
+  const navigate = useNavigate();
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -15,7 +17,7 @@ const Login = () => {
   const fetchApiLogin = async () => {
     try {
       const response = await axios.post(
-        'http://dtn-event-api.toiyeuptit.com/api/auth/login',
+        'https://dtn-event-api.toiyeuptit.com/api/auth/login',
         {
           username,
           password,
@@ -24,7 +26,8 @@ const Login = () => {
       
       if (response.data) {
         console.log('Login successful:', response.data);
-
+        localStorage.setItem('authToken', response.data.access_token);
+        navigate('/home');
       } else {
         setErrorMess('Invalid credentials');
       }
@@ -36,7 +39,7 @@ const Login = () => {
 
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem]'>
-      <img src={logologin} width={200} height={200} alt="logoptit" className='mb-[2rem]' />
+      <img src={logologin} width={100} height={100} alt="logoptit" className='mb-[2rem]' />
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4 md:p-12'>
         <h1 className='text-2xl w-full text-center font-bold text-neutral-800'>Đăng nhập</h1>
         {errorMess && <p className='text-red-600'>{errorMess}</p>}
