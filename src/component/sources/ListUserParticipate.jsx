@@ -42,9 +42,10 @@ const ListUserParticipate = () => {
       setError("No token found");
       setLoading(false);
     } 
-    return () => {
-     
-    };
+    const debounceTimeout = setTimeout(() => {
+        fetchData();
+      }, 500);
+    return () => clearTimeout(debounceTimeout)
   }, [eventId,token]);
 
   

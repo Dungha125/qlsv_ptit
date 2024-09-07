@@ -1,11 +1,13 @@
 import React, {  useState } from 'react';
 import AddEvent from './sources/AddEvent.jsx';
 import ListEvent from './sources/ListEvent.jsx';
+import { useLocation } from 'react-router-dom';
 
 const Home = () => {
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -37,10 +39,10 @@ const Home = () => {
       >
         <h2 className="text-xl font-bold mb-6 ml-[3rem] md:ml-0">Menu</h2>
         <ul>
-          <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">Tài khoản</li>
-          <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">Sự kiện</li>
-          <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">Học kỳ</li>
-          <li className="mb-4 hover:bg-gray-700 p-2 rounded cursor-pointer">Tổ chức</li>
+          <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/account' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Tài khoản</li>
+          <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/home' ? 'bg-white text-neutral-900':'bg-none hover:bg-gray-700'}`}>Sự kiện</li>
+          <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/semester' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Học kỳ</li>
+          <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/organization' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Tổ chức</li>
         </ul>
         <button
           onClick={handleTogglePopup}

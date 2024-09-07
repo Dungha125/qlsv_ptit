@@ -56,11 +56,14 @@ const ListEvent = () => {
     <div className="w-full h-screen flex">
       
       <div className="flex-1 p-4">
+        <h1 className='w-full text-2xl font-bold mb-4'>Sự kiện</h1>
         {loading ? (
           <Spin size="large" /> 
         ) : error ? (
           <p>Error: {error}</p> 
         ) : (
+        
+          
           <List
             itemLayout="horizontal"
             dataSource={events}

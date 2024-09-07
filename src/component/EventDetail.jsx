@@ -68,10 +68,10 @@ const EventDetail = () => {
               },
             }
           );
-          alert('Participant added successfully');
+   
         } catch (error) {
           console.error('Error adding participant:', error);
-          alert('Error adding participant');
+      
         }
       };
       
