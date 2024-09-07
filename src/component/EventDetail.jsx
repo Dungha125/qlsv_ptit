@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import ListUserParticipate from './sources/ListUserParticipate';
+import { useNavigate } from 'react-router-dom';
 
 const EventDetail = () => {
   const { eventId } = useParams(); 
@@ -10,7 +12,7 @@ const EventDetail = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-
+  const navigate = useNavigate();
   const token = localStorage.getItem('authToken');
 
   const handleShowPopup = () => {
@@ -103,6 +105,10 @@ const EventDetail = () => {
     return () => clearTimeout(debounceTimeout); 
   }, [searchQuery, token]);
 
+  const handleEventClick = () => {
+    navigate(`/home`);
+  }
+
 
 
   return (
@@ -113,7 +119,10 @@ const EventDetail = () => {
         <p>Error: {error}</p>
       ) : (
         <div className='w-full h-full p-4'>
-            <div className='w-full mb-4'>
+            <div className='w-full bg-red-500 fixed top-0 left-0 h-12'>
+                <button className=' h-12 flex items-center mx-8 text-white font-bold' onClick={handleEventClick}>Quay lại</button>
+            </div>
+            <div className='w-full mb-4 mt-8'>
                 <h1 className='w-full text-2xl font-bold'>{event.name}</h1>
                 <h2 className='w-full text-xl text-neutral-900'>{event.description}</h2>
                 <span className='text-neutral-900'>Địa điểm: {event.address}</span>
@@ -122,6 +131,11 @@ const EventDetail = () => {
             </div>
           
           <button onClick={handleShowPopup} className='p-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-700' >Thêm nhân sự</button>
+
+          <div className='w-full bg-slate-200 rounded-md mt-2'>
+            <h1 className='w-full text-center text-xl font-bold p-4'>Danh sách nhân sự</h1>
+            <ListUserParticipate />
+          </div>
           {
             showPopup && (
                 <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>

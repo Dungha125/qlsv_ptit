@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { List, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-const ListEvent = () => {
-  const [events, setEvents] = useState([]);
+const ListUserParticipate = () => {
+    const { eventId } = useParams();
+  const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
   const token = localStorage.getItem('authToken');
-  const navigate = useNavigate();
+
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
+        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -22,7 +23,7 @@ const ListEvent = () => {
         });
         const dataArray = response.data.data;
         if (Array.isArray(dataArray)) {
-          setEvents(dataArray); 
+          setUser(dataArray); 
         } else {
           console.error("Expected 'data' to be an array but received:", dataArray);
           setError("Unexpected data format");
@@ -44,18 +45,13 @@ const ListEvent = () => {
     return () => {
      
     };
-  }, [token]);
+  }, [eventId,token]);
 
-  const handleEventClick = (eventId) => {
-    navigate(`/events/${eventId}`);
-  }
   
 
 
   return (
-    <div className="w-full h-screen flex">
-      
-      <div className="flex-1 p-4">
+    <div className="w-full p-4">
         {loading ? (
           <Spin size="large" /> 
         ) : error ? (
@@ -63,20 +59,20 @@ const ListEvent = () => {
         ) : (
           <List
             itemLayout="horizontal"
-            dataSource={events}
-            renderItem={(event) => (
-              <List.Item onClick={()=> handleEventClick(event.id)} className=' hover:bg-slate-100'>
+            dataSource={user}
+            renderItem={(user) => (
+              <List.Item className=' hover:bg-white rounded-md bg-slate-50'>
                 <List.Item.Meta
-                  title={event.name}
-                  description={`Start: ${event.start_at} - End: ${event.finish_at}`}
+                  className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
+                  title={`${user.last_name} ${user.first_name}`}
+                  description={user.username}
                 />
               </List.Item>
             )}
           />
         )}
-      </div>
     </div>
   );
 };
 
-export default ListEvent;
+export default ListUserParticipate;
