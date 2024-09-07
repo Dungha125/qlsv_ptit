@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { List, Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const ListEvent = () => {
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true); // Thêm state cho loading
-  const [error, setError] = useState(null); // Thêm state cho error
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
   const token = localStorage.getItem('authToken');
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -20,44 +22,50 @@ const ListEvent = () => {
         });
         const dataArray = response.data.data;
         if (Array.isArray(dataArray)) {
-          setEvents(dataArray); // Sửa thành setEvents
+          setEvents(dataArray); 
         } else {
           console.error("Expected 'data' to be an array but received:", dataArray);
           setError("Unexpected data format");
         }
       } catch (error) {
         console.error('Error fetching events:', error.response ? error.response.data : error.message);
-        setError(error.message); // Lưu lỗi vào state
+        setError(error.message); 
       } finally {
-        setLoading(false); // Tắt loading
+        setLoading(false); 
       }
     };
 
-    if (token) { // Ensure token is present before calling API
+    if (token) { 
       fetchData();
     } else {
       setError("No token found");
       setLoading(false);
     } 
     return () => {
-      // Cleanup if needed, e.g., aborting ongoing requests
+     
     };
   }, [token]);
+
+  const handleEventClick = (eventId) => {
+    navigate(`/events/${eventId}`);
+  }
+  
+
 
   return (
     <div className="w-full h-screen flex">
       
       <div className="flex-1 p-4">
         {loading ? (
-          <Spin size="large" /> // Hiển thị loading spinner khi đang tải
+          <Spin size="large" /> 
         ) : error ? (
-          <p>Error: {error}</p> // Hiển thị lỗi nếu có lỗi xảy ra
+          <p>Error: {error}</p> 
         ) : (
           <List
             itemLayout="horizontal"
             dataSource={events}
             renderItem={(event) => (
-              <List.Item>
+              <List.Item onClick={()=> handleEventClick(event.id)} className=' hover:bg-slate-200 rounded-md'>
                 <List.Item.Meta
                   title={event.name}
                   description={`Start: ${event.start_at} - End: ${event.finish_at}`}

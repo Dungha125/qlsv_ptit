@@ -21,7 +21,7 @@ const Home = () => {
   };
 
   return (
-    <div className='w-full h-screen flex'>
+    <div className='w-full h-full flex'>
       <button
         onClick={toggleSidebar}
         className="md:hidden p-4 text-white bg-gray-800 fixed top-0 left-0 z-50"
@@ -31,7 +31,7 @@ const Home = () => {
         </svg>
       </button>
       <div
-        className={`top-0 left-0 w-64 h-screen bg-gray-800 text-white p-4 transition-transform transform ${
+        className={`fixed top-0 left-0 w-64 h-screen bg-gray-800 text-white p-4 z-40 transition-transform transform ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 md:w-64 md:flex md:flex-col`}
       >
@@ -52,7 +52,7 @@ const Home = () => {
         
       
     
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 md:ml-64">
         
         <ListEvent key={refresh}/>
         {showAddEvent && (

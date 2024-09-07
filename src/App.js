@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './component/Login.jsx'; 
 import Home from './component/Home.jsx';   
+import EventDetail from './component/EventDetail.jsx';
 
 
 
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/events/:eventId" element={<EventDetail />} />
       </Routes>
     </Router>
   );
