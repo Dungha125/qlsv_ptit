@@ -1,13 +1,20 @@
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import AddEvent from './sources/AddEvent.jsx';
 import ListEvent from './sources/ListEvent.jsx';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [account, setAccount] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem('authToken')
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -18,10 +25,57 @@ const Home = () => {
   };
 
   const handleAddEvent = () => {
-    setRefresh(!refresh); // Trigger refresh
-    setShowAddEvent(false); // Close the popup
+    setRefresh(!refresh); 
+    setShowAddEvent(false); 
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/auth/profile', {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json' 
+          }
+        });
+        const dataArray = response.data.data;
+        setAccount(dataArray);
+      } catch (error) {
+        console.error('Error fetching account data:', error.response ? error.response.data : error.message);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) { 
+      fetchData();
+    } else {
+      setError("No token found");
+      setLoading(false);
+    } 
+    return () => {
+     
+    };
+  }, [token]);
+
+  const fetchLogout = async () => {
+    try {
+      await axios.post('https://dtn-event-api.toiyeuptit.com/api/auth/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      localStorage.removeItem('authToken'); 
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error.response ? error.response.data : error.message);
+      setError(error.message);
+    }
+  };
+
+  
   return (
     <div className='w-full h-full flex'>
       <button
@@ -50,6 +104,21 @@ const Home = () => {
         >
           Tạo sự kiện
         </button>
+        <div className='w-[90%] h-[52px] rounded-lg bg-slate-100 bottom-4 fixed '>
+            {loading ? (
+            <p>Loading...</p>
+            ) : error ? (
+              <p>Error: {error}</p>
+            ) : (
+            <div className='w-full p-1 flex'>
+              <span className='text-neutral-700'>
+                <p className='px-4 font-bold truncate'>{account.last_name} {account.first_name}</p>
+                <p className='px-4 font-medium text-sm text-neutral-500'>{account.username}</p>
+              </span>
+              <button onClick={fetchLogout} className='bg-red-500 px-2 rounded-md'>Đăng xuất</button>
+            </div>
+            )}
+        </div>
       </div>
         
       
@@ -61,7 +130,7 @@ const Home = () => {
           <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
           <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
             <h1 className='text-2xl font-bold mb-4 text-center'>Tạo sự kiện mới</h1>
-            {/* Close Button */}
+            
             <button
               onClick={handleTogglePopup}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
@@ -70,7 +139,7 @@ const Home = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
-            {/* Popup Content */}
+         
             <div className='overflow-auto max-h-[80vh]'>
               <AddEvent  onAddEvent={handleAddEvent} />
             </div>
