@@ -75,7 +75,7 @@ const ListEvent = () => {
         ) : error ? (
           <p>Error: {error}</p> 
         ) : (
-        <>
+          <div className='w-full flex flex-col '>
           <div className='w-full h-[80%]'>
           <List
             itemLayout="horizontal"
@@ -90,7 +90,7 @@ const ListEvent = () => {
             )}
           />
           </div>
-          <div className='w-full flex justify-center'>
+          <div className='w-full flex justify-center mb-6'>
             <Pagination
               current={currentPage}
               total={totalEvents}
@@ -99,8 +99,8 @@ const ListEvent = () => {
               className="mt-4 "
             />
           </div>
+          </div>
           
-          </>
         )}
       </div>
     </div>
