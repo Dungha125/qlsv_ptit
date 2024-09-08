@@ -17,45 +17,43 @@ const ListEvent = () => {
   const navigate = useNavigate();
 
   //số trang
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json' 
-          },
-          params: {
-            page: currentPage,
-            per_page: 10 
-          }
-        });
-        const { data, total } = response.data;
-        if (Array.isArray(data)) {
-          setEvents(data); 
-          setTotalEvents(total);
-          setTotalPages(Math.ceil(total / 20));
-        } else {
-          console.error("Expected 'data' to be an array but received:", data);
-          setError("Unexpected data format");
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json' 
+        },
+        params: {
+          page: currentPage,
+          per_page: 10 
         }
-      } catch (error) {
-        console.error('Error fetching events:', error.response ? error.response.data : error.message);
-        setError(error.message); 
-      } finally {
-        setLoading(false); 
+      });
+      const { data, total } = response.data;
+      if (Array.isArray(data)) {
+        setEvents(data); 
+        setTotalEvents(total);
+        setTotalPages(Math.ceil(total / 10));
+      } else {
+        console.error("Expected 'data' to be an array but received:", data);
+        setError("Unexpected data format");
       }
-    };
+    } catch (error) {
+      console.error('Error fetching events:', error.response ? error.response.data : error.message);
+      setError(error.message); 
+    } finally {
+      setLoading(false); 
+    }
+  };
 
+  useEffect(() => {
     if (token) { 
       fetchData();
     } else {
       setError("No token found");
       setLoading(false);
     } 
-    return () => {
-     
-    };
   }, [token, currentPage]);
 
   const handleEventClick = (eventId) => {
@@ -110,7 +108,10 @@ const handleDeleteEvent = async (eventId) => {
     setIsEditModalVisible(true); // Mở popup
   };
   
-
+  const handleEventUpdate = () => {
+    setIsEditModalVisible(false);
+    fetchData(); // Re-fetch the events list after editing
+  };
 
   return (
     <div className="w-full h-screen flex">
@@ -165,7 +166,7 @@ const handleDeleteEvent = async (eventId) => {
           onCancel={() => setIsEditModalVisible(false)}
           footer={null}
         >
-          <EditEventForm event={selectedEvent} onClose={() => setIsEditModalVisible(false)} />
+          <EditEventForm event={selectedEvent} onClose={handleEventUpdate} />
         </Modal>
       )}
     </div>
