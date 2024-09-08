@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { List, Spin, Pagination } from 'antd';
+import { List, Spin, Pagination, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import EditEventForm from './EditEventForm';
 
 const ListEvent = () => {
   const [events, setEvents] = useState([]);
@@ -10,10 +11,12 @@ const ListEvent = () => {
   const [currentPage, setCurrentPage] = useState(1); 
   const [totalEvents, setTotalEvents] = useState(0); 
   const [totalPages, setTotalPages] = useState(0); 
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const token = localStorage.getItem('authToken');
   const navigate = useNavigate();
 
-
+  //số trang
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,6 +65,50 @@ const ListEvent = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  //xoá sự kiện
+const handleDeleteEvent = async (eventId) => {
+  try {
+    setLoading(true); // Bắt đầu loading khi xóa
+    await axios.delete(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Sau khi xóa, lọc bỏ sự kiện bị xóa ra khỏi danh sách
+    const updatedEvents = events.filter(event => event.id !== eventId);
+
+    // Nếu số lượng sự kiện hiện tại ít hơn số lượng mục trên 1 trang, lấy thêm sự kiện từ trang tiếp theo
+    if (updatedEvents.length < 10 && currentPage < totalPages) {
+      const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json' 
+        },
+        params: {
+          page: currentPage + 1,
+          per_page: 1  // Lấy thêm 1 sự kiện từ trang kế tiếp
+        }
+      });
+      const { data } = response.data;
+      setEvents([...updatedEvents, ...data]); // Thêm sự kiện mới vào danh sách hiện tại
+    } else {
+      setEvents(updatedEvents); // Cập nhật lại danh sách sự kiện
+    }
+
+    setTotalEvents(totalEvents - 1); // Giảm tổng số sự kiện
+    setTotalPages(Math.ceil((totalEvents - 1) / 10)); // Cập nhật số trang
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false); // Kết thúc loading
+  }
+};
+
+  //sử sự kiện
+  const handleEditEvent = (event) => {
+    setSelectedEvent(event); // Lưu sự kiện đã chọn
+    setIsEditModalVisible(true); // Mở popup
+  };
   
 
 
@@ -81,14 +128,23 @@ const ListEvent = () => {
             itemLayout="horizontal"
             dataSource={events}
             renderItem={(event) => (
-              <List.Item onClick={()=> handleEventClick(event.id)} className=' hover:bg-slate-100'>
-                <List.Item.Meta
+              <List.Item  className=' hover:bg-slate-100 flex'>
+                <List.Item.Meta 
+                  onClick={()=> handleEventClick(event.id)}
                   title={event.name}
                   description={`Start: ${event.start_at} - End: ${event.finish_at}`}
-                />
+                />  
+                <span className='mx-4 flex gap-2'>
+                  <button onClick={() => handleEditEvent(event)} className='p-2 bg-green-500 text-white rounded-md z-60'>Sửa</button>
+                  <button onClick={() => handleDeleteEvent(event.id)} className='p-2 bg-red-500 text-white rounded-md z-60'>Xoá</button>
+                 
+                </span>
               </List.Item>
+             
             )}
           />
+         
+          
           </div>
           <div className='w-full flex justify-center mb-6'>
             <Pagination
@@ -103,6 +159,15 @@ const ListEvent = () => {
           
         )}
       </div>
+      {isEditModalVisible && (
+        <Modal
+          visible={isEditModalVisible}
+          onCancel={() => setIsEditModalVisible(false)}
+          footer={null}
+        >
+          <EditEventForm event={selectedEvent} onClose={() => setIsEditModalVisible(false)} />
+        </Modal>
+      )}
     </div>
   );
 };
