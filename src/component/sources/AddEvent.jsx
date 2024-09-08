@@ -32,7 +32,10 @@ const AddEvent = ({ onAddEvent }) => {
         }
 
   
-        const sanitizeAlphaSpaces = (text) => text.replace(/[^a-zA-Z\s]/g, '');
+        const sanitizeAlphaSpaces = (text) => {
+            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẳẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ\s0-9]/g, ''); //chưa thêm dấu đặc biệt được
+            
+        };
 
         try {
             const response = await axios.post(

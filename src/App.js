@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './component/Login.jsx'; 
 import Home from './component/Home.jsx';   
 import EventDetail from './component/EventDetail.jsx';
+import Account from './component/Account.jsx';
 
 
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/events/:eventId" element={<EventDetail />} />
+        <Route path="/account" element={<Account/>}/>
       </Routes>
     </Router>
   );

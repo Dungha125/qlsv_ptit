@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ListUserParticipate from './sources/ListUserParticipate';
 import { useNavigate } from 'react-router-dom';
-
+import { Alert } from 'antd';
 const EventDetail = () => {
   const { eventId } = useParams(); 
   const [event, setEvent] = useState(null);
@@ -12,8 +12,11 @@ const EventDetail = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [participants, setParticipants] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem('authToken');
+  const [alert, setAlert] = useState({visible:false, type: '', message: ''});  
+
 
   const handleShowPopup = () => {
     setShowPopup(!showPopup);
@@ -31,6 +34,7 @@ const EventDetail = () => {
               }}
         );
         setEvent(response.data.data);
+        fetchData();
       } catch (error) {
         console.error('Error fetching event details:', error);
         setError(error.message);
@@ -45,6 +49,29 @@ const EventDetail = () => {
         setLoading(false);
       }
     }, [eventId, token]);
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+          }
+        });
+        const dataArray = response.data.data;
+        if (Array.isArray(dataArray)) {
+          setParticipants(dataArray);
+        } else {
+          console.error("Expected 'data' to be an array but received:", dataArray);
+          setError("Unexpected data format");
+        }
+      } catch (error) {
+        console.error('Error fetching participants:', error.response ? error.response.data : error.message);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     const handleAddParticipant = async (user) => {
         try {
@@ -68,10 +95,26 @@ const EventDetail = () => {
               },
             }
           );
+          setAlert({
+            visible: true,
+            type: 'success',
+            message: `Đã thêm ${user.last_name} ${user.first_name} vào sự kiện`,
+          });
+          const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json'
+            }
+          });
+          setParticipants(response.data.data);
    
         } catch (error) {
           console.error('Error adding participant:', error);
-      
+          setAlert({
+            visible: false,
+            type: 'error',
+            message: `Đã xay ra lỗi khi thêm ${user.last_name} ${user.first_name}`,
+          });
         }
       };
       
@@ -109,6 +152,16 @@ const EventDetail = () => {
     navigate(`/home`);
   }
 
+  useEffect(() => {
+    let autoCloseTimeout;
+    if (alert.visible) {
+      autoCloseTimeout = setTimeout(() => {
+        setAlert({ ...alert, visible: false });
+      }, 5000);
+    }
+    return () => clearTimeout(autoCloseTimeout);
+  }, [alert.visible]);
+
 
 
   return (
@@ -124,7 +177,7 @@ const EventDetail = () => {
             </div>
             <div className='w-full mb-4 mt-8'>
                 <h1 className='w-full text-2xl font-bold'>{event.name}</h1>
-                <h2 className='w-full text-xl text-neutral-900'>{event.description}</h2>
+                <h2 className='w-full text-sm text-justify text-neutral-900'>{event.description}</h2>
                 <span className='text-neutral-900'>Địa điểm: {event.address}</span>
                 <p className='text-gray-900'>Start: {event.start_at}</p>
                 <p>End: {event.finish_at}</p>
@@ -134,7 +187,7 @@ const EventDetail = () => {
 
           <div className='w-full bg-slate-200 rounded-md mt-2'>
             <h1 className='w-full text-center text-xl font-bold p-4'>Danh sách nhân sự</h1>
-            <ListUserParticipate />
+            <ListUserParticipate participants={participants}/>
           </div>
           {
             showPopup && (
@@ -184,6 +237,17 @@ const EventDetail = () => {
                 </div>
             )
           }
+          {alert.visible && (
+            <div className='w-full flex justify-center z-50 top-0 absolute'>
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            showIcon
+            closable
+            onClose={() => setAlert({ ...alert, visible: false })}
+            className="mt-4"
+          /></div>
+        )}
         </div>
       )}
     </div>
