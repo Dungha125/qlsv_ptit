@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { List, Spin } from 'antd';
+import { List, Spin, Pagination } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const ListEvent = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalEvents, setTotalEvents] = useState(0); 
+  const [totalPages, setTotalPages] = useState(0); 
   const token = localStorage.getItem('authToken');
   const navigate = useNavigate();
 
@@ -18,13 +21,19 @@ const ListEvent = () => {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
+          },
+          params: {
+            page: currentPage,
+            per_page: 10 
           }
         });
-        const dataArray = response.data.data;
-        if (Array.isArray(dataArray)) {
-          setEvents(dataArray); 
+        const { data, total } = response.data;
+        if (Array.isArray(data)) {
+          setEvents(data); 
+          setTotalEvents(total);
+          setTotalPages(Math.ceil(total / 20));
         } else {
-          console.error("Expected 'data' to be an array but received:", dataArray);
+          console.error("Expected 'data' to be an array but received:", data);
           setError("Unexpected data format");
         }
       } catch (error) {
@@ -44,11 +53,15 @@ const ListEvent = () => {
     return () => {
      
     };
-  }, [token]);
+  }, [token, currentPage]);
 
   const handleEventClick = (eventId) => {
     navigate(`/events/${eventId}`);
   }
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   
 
 
@@ -62,8 +75,8 @@ const ListEvent = () => {
         ) : error ? (
           <p>Error: {error}</p> 
         ) : (
-        
-          
+        <>
+          <div className='w-full h-[80%]'>
           <List
             itemLayout="horizontal"
             dataSource={events}
@@ -76,6 +89,18 @@ const ListEvent = () => {
               </List.Item>
             )}
           />
+          </div>
+          <div className='w-full flex justify-center'>
+            <Pagination
+              current={currentPage}
+              total={totalEvents}
+              pageSize={10}
+              onChange={handlePageChange}
+              className="mt-4 "
+            />
+          </div>
+          
+          </>
         )}
       </div>
     </div>
