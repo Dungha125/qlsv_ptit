@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { logologin, backlogin } from '../assets';
+import { logologin, backlogin, logodoan } from '../assets';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -44,7 +44,10 @@ const Login = () => {
 
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem]'>
-      <img src={logologin} width={100} height={100} alt="logoptit" className='mb-[2rem]' />
+      <span className='flex flex-row gap-5'>
+      <img src={logologin} width={75} height={75} alt="logoptit" className='mb-[2rem] object-contain' />
+      <img src={logodoan} width={90} height={90} alt="logodoan" className='mb-[2rem] object-contain' />
+      </span>
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4 md:p-12'>
         <h1 className='text-2xl w-full text-center font-bold text-neutral-800'>Đăng nhập</h1>
         {errorMess && <p className='text-red-600'>{errorMess}</p>}

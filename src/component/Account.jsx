@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Account = () => {
-  const [showAddEvent, setShowAddEvent] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +35,9 @@ const Account = () => {
 
   const handleClickHome = () => {
     navigate('/home');
+  };
+  const handleClickSemester = () => {
+    navigate('/semester');
   };
 
 
@@ -89,7 +91,7 @@ const Account = () => {
         <ul>
           <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/account' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Tài khoản</li>
           <li onClick={handleClickHome} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/home' ? 'bg-white text-neutral-900':'bg-none hover:bg-gray-700'}`}>Sự kiện</li>
-          <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/semester' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Học kỳ</li>
+          <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/semester' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Học kỳ</li>
           <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/organization' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Tổ chức</li>
         </ul>
       

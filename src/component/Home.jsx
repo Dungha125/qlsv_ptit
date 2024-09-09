@@ -78,6 +78,9 @@ const Home = () => {
   const handleClickAccount = () => {
     navigate('/account');
   };
+  const handleClickSemester = () => {
+    navigate('/semester');
+  };
 
   
   return (
@@ -99,7 +102,7 @@ const Home = () => {
         <ul>
           <li onClick={handleClickAccount} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/account' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Tài khoản</li>
           <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/home' ? 'bg-white text-neutral-900':'bg-none hover:bg-gray-700'}`}>Sự kiện</li>
-          <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/semester' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Học kỳ</li>
+          <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/semester' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Học kỳ</li>
           <li className={`mb-4 p-2 rounded cursor-pointer ${location.pathname==='/organization' ? 'bg-white text-neutral-900 ':'bg-none hover:bg-gray-700'}`}>Tổ chức</li>
         </ul>
         <button

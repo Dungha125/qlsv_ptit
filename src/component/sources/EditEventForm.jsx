@@ -91,13 +91,16 @@ const EditEventForm = ({ event, onClose }) => {
       </div>
       <div className='w-full'>
         <label className='px-2 font-bold'>Học kỳ:</label>
-        <input
-          type="text"
+        <select 
+          id='eventSemester'
           name="semester_id"
           value={formData.semester_id}
           onChange={handleInputChange}
-          className='bg-white px-2 rounded-md py-1 text-base '
-        />
+          className='bg-white px-2 rounded-md py-1 text-base '>
+            <option value="">Chọn học kỳ</option>
+            <option value="1">Học kỳ 1</option>
+            <option value="2">Học kỳ 2</option>
+        </select>
       </div>
       <div>
         <label className='px-2 font-bold'>Ngày bắt đầu:</label>

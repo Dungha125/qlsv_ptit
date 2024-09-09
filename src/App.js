@@ -6,6 +6,7 @@ import Login from './component/Login.jsx';
 import Home from './component/Home.jsx';   
 import EventDetail from './component/EventDetail.jsx';
 import Account from './component/Account.jsx';
+import Semester from './component/Semester.jsx';
 
 
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/events/:eventId" element={<EventDetail />} />
         <Route path="/account" element={<Account/>}/>
+        <Route path="/semester" element={<Semester/>} />
       </Routes>
     </Router>
   );
