@@ -178,7 +178,7 @@ const EventDetail = () => {
             <div className='w-full mb-4 mt-8'>
                 <h1 className='w-full text-2xl font-bold'>{event.name}</h1>
                 <h2 className='w-full text-sm text-justify text-neutral-900'>{event.description}</h2>
-                <span className='text-neutral-900'>Địa điểm: {event.address}</span>
+                <span className='text-neutral-900'>Địa điểm tổ chức: {event.address}</span>
                 <p className='text-gray-900'>Start: {event.start_at}</p>
                 <p>End: {event.finish_at}</p>
             </div>
