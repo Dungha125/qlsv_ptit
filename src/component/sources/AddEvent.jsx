@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AddEvent = ({ onAddEvent }) => {
     const [eventName, setEventName] = useState('');
@@ -10,8 +10,29 @@ const AddEvent = ({ onAddEvent }) => {
     const [eventSemester, setEventSemester] = useState('');
     const [eventDescription, setEventDescription] = useState('');
     const [message, setMessage] = useState('');
+    const [semesters, setSemesters] = useState([]);
 
     const token = localStorage.getItem('authToken');
+
+    useEffect(() => {
+        const fetchSemesters = async () => {
+            try {
+                const response = await axios.get('http://dtn-event-api.toiyeuptit.com/api/semesters', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                    },
+                });
+                setSemesters(response.data.data); // Điều chỉnh dựa trên cấu trúc dữ liệu của API
+            } catch (error) {
+                console.error('Error fetching semesters:', error);
+                setMessage('Error fetching semesters.');
+            }
+        };
+    
+        fetchSemesters();
+    }, [token]);
+
 
     const handleCreateEvent = async (e) => {
         e.preventDefault();
@@ -150,12 +171,19 @@ const AddEvent = ({ onAddEvent }) => {
                     <select
                         id='eventSemester'
                         value={eventSemester}
-                        onChange={(e) => setEventSemester(e.target.value ? parseInt(e.target.value, 10) : '')}
+                        onChange={(e) => setEventSemester(e.target.value)}
                         className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     >
                         <option value="">Chọn học kỳ đang học</option>
-                        <option value="1">Học kỳ 1</option>
-                        <option value="9">Học kỳ 2</option>
+                        {Array.isArray(semesters) && semesters.length > 0 ? (
+                                semesters.map((semester) => (
+                                    <option key={semester.id} value={semester.id}>
+                                        {semester.name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option disabled>Không có học kỳ nào</option>
+                            )}
                     </select>
                 </div>
 
@@ -199,3 +227,4 @@ const AddEvent = ({ onAddEvent }) => {
 };
 
 export default AddEvent;
+

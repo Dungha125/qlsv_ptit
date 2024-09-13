@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { List, Spin, message } from 'antd';
 
 const SemesterDetail = () => {
@@ -9,6 +9,7 @@ const SemesterDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const token = localStorage.getItem('authToken'); // Get auth token from localStorage
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!token) {
@@ -49,9 +50,17 @@ const SemesterDetail = () => {
         return <p>Token không tồn tại. Vui lòng đăng nhập để tiếp tục.</p>;
     }
 
+
+    const handleEventClick = () => {
+        navigate(`/semester`);
+      }
     return (
-        <div className="p-4">
-            <h1 className="text-4xl font-bold mb-4">Danh sách sự kiện của học kỳ</h1>
+        <div className="w-full h-full p-4">
+        <div className='w-full bg-red-500 fixed top-0 left-0 h-12'>
+                <button className=' h-12 flex items-center mx-8 text-white font-bold' onClick={handleEventClick}>Quay lại</button>
+        </div>
+        
+            <h1 className="text-4xl font-bold mb-4 mt-12">Danh sách sự kiện của học kỳ</h1>
 
             {loading ? (
                 <Spin size="large" />
