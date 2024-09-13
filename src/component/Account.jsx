@@ -26,7 +26,7 @@ const Account = () => {
         },
       });
       localStorage.removeItem('authToken'); 
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
       setError(error.message);

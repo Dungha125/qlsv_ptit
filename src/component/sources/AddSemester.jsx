@@ -16,65 +16,61 @@ const AddSemester = () => {
 
     const handleCreateSemester = async (e) => {
         e.preventDefault();
-
+    
         const formatDateTime = (date) => {
             const d = new Date(date);
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
         };
-
+    
         const formattedStart = formatDateTime(semesterStartAt);
         const formattedFinish = formatDateTime(semesterFinishAt);
-  
+    
         const sanitizeAlphaSpaces = (text) => {
-            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẳẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ\s0-9]/g, ''); //chưa thêm dấu đặc biệt được
-            
+            // Giữ lại các ký tự chữ cái, số, khoảng trắng và các dấu đặc biệt phổ biến
+            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
         };
-      try{
-        await axios.post('https://dtn-event-api.toiyeuptit.com/api/semesters',
-          {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type':'application/json'
-          },
-          {
-            name: sanitizeAlphaSpaces(semesterName),
-            code: semesterCode,
-            about: sanitizeAlphaSpaces(semesterAbout),
-            short_name: semesterShortName,
-            status: semesterStatus,
-            start_at: formattedStart,
-            finish_at:formattedFinish,
-          }
-          )
-      }
-      catch(error)
-      {
-        if (error.response) {
-          const { data } = error.response;
-          let errorMessage = 'Error creating event: ';
-          if (data.message) {
-              errorMessage += data.message;
-          }
-          if (data.errors) {
-              for (const [field, errors] of Object.entries(data.errors)) {
-                  errorMessage += `\n${field}: ${errors.join(', ')}`;
-              }
-          }
-          setMessage(errorMessage);
-          console.error('Error response data:', data);
-          console.error('Error response status:', error.response.status);
-      } else if (error.request) {
-          setMessage('Error creating event: No response from server');
-          console.error('Error request:', error.request);
-      } else {
-          setMessage('Error creating event: ' + error.message);
-          console.error('General error:', error.message);
-      }
-      }
-    }
-  
-  
-
+    
+        try {
+            await axios.post('https://dtn-event-api.toiyeuptit.com/api/semesters', 
+                {
+                    name: sanitizeAlphaSpaces(semesterName),
+                    code: semesterCode,
+                    about: sanitizeAlphaSpaces(semesterAbout),
+                    short_name: semesterShortName,
+                    status: semesterStatus,
+                    start_at: formattedStart,
+                    finish_at: formattedFinish,
+                }, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+            setMessage('Học kỳ đã được tạo thành công!');
+            
+        } catch (error) {
+            if (error.response) {
+                const { data } = error.response;
+                let errorMessage = 'Error creating semester: ';
+                if (data.message) {
+                    errorMessage += data.message;
+                }
+                if (data.errors) {
+                    for (const [field, errors] of Object.entries(data.errors)) {
+                        errorMessage += `\n${field}: ${errors.join(', ')}`;
+                    }
+                }
+                setMessage(errorMessage);
+            } else if (error.request) {
+                setMessage('Error creating semester: No response from server');
+            } else {
+                setMessage('Error creating semester: ' + error.message);
+            }
+        }
+    };
 
 
   return (

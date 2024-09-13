@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AddEvent from './sources/AddEvent';
 import { List, Spin, Modal } from 'antd';
 import AddSemester from './sources/AddSemester';
+import EditSemesForm from './sources/EditSemesterForm';
 
 const Semester = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,12 +19,13 @@ const Semester = () => {
     const [showAddSemes, setShowAddSemes] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [message, setMessage] = useState('');
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [selectedSemes, setSelectedSemes] = useState(null);
 
 
-
-
-
-
+    const handleClickSemesDetail= (semesterId) => {
+      navigate(`/semester/${semesterId}`);
+    };
 
     const toggleSidebar = () => {
       setIsSidebarOpen(!isSidebarOpen);
@@ -43,7 +45,7 @@ const Semester = () => {
           },
         });
         localStorage.removeItem('authToken'); 
-        navigate('/');
+        navigate('/', { replace: true });
       } catch (error) {
         console.error('Error logging out:', error.response ? error.response.data : error.message);
         setError(error.message);
@@ -85,8 +87,34 @@ const Semester = () => {
       };
     }, [token]);
 
+    const handleDeleteSemester = async (semesterId) => {
+      try {
+        setLoading(true); // Start loading when deleting
+        await axios.delete(`https://dtn-event-api.toiyeuptit.com/api/semesters/${semesterId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+    
+        // After deleting, filter out the deleted semester from the list
+        const updatedSemesters = semester.filter(sem => sem.id !== semesterId);
+    
+         setSemester(updatedSemesters); // Update the semester list
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false); // End loading
+      }
+    };
+    
 
-    useEffect(()=>{
+    const handleEditSemes = (semester) => {
+      setSelectedSemes(semester); // Set the selected semester
+      setIsEditModalVisible(true); // Open the modal
+    };
+  
+    const handleSemesUpdate = () => {
+      setIsEditModalVisible(false);
+      fetchSemes(); // Re-fetch the semesters list after editing
+    };
       const fetchSemes = async () => {
         try{
           const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/semesters',
@@ -109,16 +137,14 @@ const Semester = () => {
           setLoading(false);
         }
       };
-      if (token) { 
-        fetchSemes();
-      } else {
-        setError("No token found");
-        setLoading(false);
-      } 
-      return () => {
-       
-      };
-    }, [token]);
+      useEffect(() => {
+        if (token) { 
+          fetchSemes();
+        } else {
+          setError("No token found");
+          setLoading(false);
+        } 
+      }, [token]);
 
       const handleTogglePopup = () => {
             setShowAddEvent(!showAddEvent);
@@ -205,7 +231,7 @@ const Semester = () => {
               ) : error ? (
                 <p>Error: {error}</p> 
               ) : (
-                <div className='w-full flex flex-col'>
+                <div className='w-full flex flex-col mt-4'>
                 <div className='w-full h-[80%]'>
                 <List
                   itemLayout="horizontal"
@@ -213,13 +239,13 @@ const Semester = () => {
                   renderItem={(semesters) => (
                     <List.Item  className=' hover:bg-slate-100 flex'>
                       <List.Item.Meta 
-                        //onClick={()=> handleEventClick(semesters.id)}
+                        onClick = {()=>handleClickSemesDetail(semesters.id)}
                         title={semesters.name}
                         description={`Start: ${semesters.start_at} - End: ${semesters.finish_at}`}
                       />  
                       <span className='mx-4 flex gap-2'>
-                        <button  className='p-2 bg-green-500 text-white rounded-md z-60'>Sửa</button>
-                        <button  className='p-2 bg-red-500 text-white rounded-md z-60'>Xoá</button>
+                        <button onClick={() => handleEditSemes(semesters)} className='p-2 bg-green-500 text-white rounded-md z-60'>Sửa</button>
+                        <button onClick={() => handleDeleteSemester(semesters.id)} className='p-2 bg-red-500 text-white rounded-md z-60'>Xoá</button>
                       
                       </span>
                     </List.Item>
@@ -230,6 +256,15 @@ const Semester = () => {
                 </div>
               )}
             </div>
+            {isEditModalVisible && (
+              <Modal
+                visible={isEditModalVisible}
+                onCancel={() => setIsEditModalVisible(false)}
+                footer={null}
+              >
+                <EditSemesForm semester={selectedSemes} onClose={handleSemesUpdate} />
+              </Modal>
+            )}
             {showAddEvent && (
                 <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
                 <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>

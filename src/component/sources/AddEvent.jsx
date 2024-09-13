@@ -154,8 +154,8 @@ const AddEvent = ({ onAddEvent }) => {
                         className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     >
                         <option value="">Chọn học kỳ</option>
-                        <option value="1">Học kỳ 1</option>
-                        <option value="2">Học kỳ 2</option>
+                        <option value="7">Học kỳ 1</option>
+                        <option value="9">Học kỳ 2</option>
                     </select>
                 </div>
 
