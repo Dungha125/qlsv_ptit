@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+
 import { List, Spin } from 'antd';
-import { useParams } from 'react-router-dom';
+
 
 const ListUserParticipate = ({ participants }) => {
 
