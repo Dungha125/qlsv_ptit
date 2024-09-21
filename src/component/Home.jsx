@@ -4,9 +4,11 @@ import ListEvent from './sources/ListEvent.jsx';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CreateAccountForm from './sources/CreateAccountOrganization.jsx';
 
 const Home = () => {
   const [showAddEvent, setShowAddEvent] = useState(false);
+  const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [account, setAccount] = useState([]);
@@ -24,6 +26,13 @@ const Home = () => {
     setShowAddEvent(!showAddEvent);
   };
 
+  const handleCreatePopup = () => {
+    setShowCreateAccount(!showCreateAccount);
+  };
+  const handleCreateEvent = () => {
+    setRefresh(!refresh);
+    setShowCreateAccount(false);
+  }
   const handleAddEvent = () => {
     setRefresh(!refresh); 
     setShowAddEvent(false); 
@@ -87,7 +96,7 @@ const Home = () => {
     <div className='w-full h-full flex'>
       <button
         onClick={toggleSidebar}
-        className="md:hidden p-4 text-white bg-gray-800 fixed top-0 left-0 z-50"
+        className={`md:hidden p-4 md:text-white md:bg-gray-800 ${isSidebarOpen ? "text-white bg-transparent":"bg-transparent text-gray-800"} fixed top-0 left-0 z-50`}
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -106,18 +115,24 @@ const Home = () => {
         </ul>
         <button
           onClick={handleTogglePopup}
-          className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+          className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
         >
           Tạo sự kiện
         </button>
-        <div className='w-[90%] h-[52px] rounded-lg bg-slate-100 bottom-4 fixed '>
+        <button
+          onClick={handleCreatePopup}
+          className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+        >
+          Tạo tài khoản
+        </button>
+        <div className='w-[90%] h-[52px] rounded-lg bg-slate-100 bottom-4 fixed justify-center items-center'>
             {loading ? (
             <p>Loading...</p>
             ) : error ? (
               <p>Error: {error}</p>
             ) : (
             <div className='w-full p-1 flex'>
-              <span className='text-neutral-700'>
+              <span className='text-neutral-700 max-w-[60%]'>
                 <p className='px-4 font-bold truncate'>{account.last_name} {account.first_name}</p>
                 <p className='px-4 font-medium text-sm text-neutral-500'>{account.username}</p>
               </span>
@@ -152,6 +167,28 @@ const Home = () => {
           </div>
         </div>
         )}
+        {
+  showCreateAccount && (
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+      <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
+        <h1 className='text-2xl font-bold mb-4 text-center'>Tạo tài khoản mới</h1>
+        
+        <button
+          onClick={handleCreatePopup} // Chỉnh sửa để gọi hàm đúng
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      
+        <div className='overflow-auto max-h-[80vh]'>
+          <CreateAccountForm onAddEvent={handleCreateEvent} /> {/* Đảm bảo truyền tham số đúng */}
+        </div>
+      </div>
+    </div>
+  )
+}
         
       </div>
     </div>

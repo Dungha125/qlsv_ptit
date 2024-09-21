@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { List, Spin, message } from 'antd';
+import { List, Spin } from 'antd';
 
 const SemesterDetail = () => {
     const { semesterId } = useParams(); // Get semester ID from the URL
