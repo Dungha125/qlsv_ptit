@@ -101,7 +101,7 @@ const Semester = () => {
 
   return (
     <div className='w-full h-full flex'>
-      <Sidebar/>
+      <Sidebar setRefresh={setRefresh} />
         <div className='flex-1 p-4 md:ml-64'>
             <div className="flex-1 p-4">
               <h1 className='text-4xl font-bold mb-4'>Học kỳ</h1>

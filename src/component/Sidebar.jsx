@@ -1,12 +1,13 @@
-// Sidebar.jsx
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import AddEvent from './sources/AddEvent';
+import CreateAccountForm from './sources/CreateAccountOrganization';
 
-const Sidebar = () => {
+const Sidebar = ({setRefresh}) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [account, setAccount] = useState([]);
+  const [account, setAccount] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('authToken');
@@ -35,6 +36,14 @@ const Sidebar = () => {
 
   const handleCreatePopup = () => {
     setShowCreateAccount(!showCreateAccount);
+  };
+
+  const handleCreateEvent = () => {
+    setShowCreateAccount(false);
+  }
+  const handleAddEvent = () => {
+    setRefresh(prev => !prev);
+    setShowAddEvent(false); 
   };
 
   useEffect(() => {
@@ -83,7 +92,6 @@ const Sidebar = () => {
     }
   };
 
-
   return (
     <>
       <button
@@ -102,28 +110,39 @@ const Sidebar = () => {
       >
         <h2 className="text-xl font-bold mb-6 ml-[3rem] md:ml-0">Menu</h2>
         <ul>
+          {/* Hiển thị tài khoản và home cho tất cả mọi người */}
           <li onClick={handleClickAccount} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/account' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
             Tài khoản
           </li>
           <li onClick={handleClickHome} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/home' ? 'bg-white text-neutral-900' : 'bg-none hover:bg-gray-700'}`}>
             Sự kiện
           </li>
-          <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/semester' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
-            Học kỳ
-          </li>
+
+          {/* Nếu account group === 6 thì hiển thị thêm menu học kỳ */}
+          {account.member_group === 6 && (
+            <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/semester' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
+              Học kỳ
+            </li>
+          )}
         </ul>
-        <button
-          onClick={handleTogglePopup}
-          className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
-        >
-          Tạo sự kiện
-        </button>
-        <button
-          onClick={handleCreatePopup}
-          className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
-        >
-          Tạo tài khoản
-        </button>
+
+        {/* Các button tạo sự kiện và tạo tài khoản chỉ hiển thị khi account group === 6 */}
+        {account.member_group === 6 && (
+          <>
+            <button
+              onClick={handleTogglePopup}
+              className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            >
+              Tạo sự kiện
+            </button>
+            <button
+              onClick={handleCreatePopup}
+              className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            >
+              Tạo tài khoản
+            </button>
+          </>
+        )}
 
         <div className='w-[90%] h-[52px] rounded-lg bg-slate-100 bottom-4 fixed justify-center items-center'>
           {loading ? (
@@ -141,6 +160,50 @@ const Sidebar = () => {
           )}
         </div>
       </div>
+
+      {/* Add Event Popup */}
+      {showAddEvent && (
+          <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+          <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
+            <h1 className='text-2xl font-bold mb-4 text-center'>Tạo sự kiện mới</h1>
+            
+            <button
+              onClick={handleTogglePopup}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+         
+            <div className='overflow-auto max-h-[80vh]'>
+              <AddEvent onAddEvent={handleAddEvent} />
+            </div>
+          </div>
+        </div>
+        )}
+
+      {/* Create Account Popup */}
+      {showCreateAccount && (
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+      <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
+        <h1 className='text-2xl font-bold mb-4 text-center'>Tạo tài khoản mới</h1>
+        
+        <button
+          onClick={handleCreatePopup} // Chỉnh sửa để gọi hàm đúng
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+     
+        <div className='overflow-auto max-h-[80vh]'>
+          <CreateAccountForm onCreateAccount={handleCreateEvent} />
+        </div>
+      </div>
+    </div>
+)}
     </>
   );
 };

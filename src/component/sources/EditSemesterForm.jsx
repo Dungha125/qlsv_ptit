@@ -10,14 +10,14 @@ const sanitizeAlphaSpaces = (text) => {
 const EditSemesForm = ({ semester, onClose }) => {
   const formatDateTime = (date) => {
     const d = new Date(date);
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
 };
 
 
   const [formData, setFormData] = useState({
     name: sanitizeAlphaSpaces(semester.name),
     start_at: semester.start_at,
-    finish_at: formatDateTime(semester.finish_at),
+    finish_at: semester.finish_at,
     about: sanitizeAlphaSpaces(semester.about),
     code: semester.code,
     short_name: semester.short_name,

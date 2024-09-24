@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const Account = () => {
-
+  const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [account, setAccount] = useState([]);
@@ -46,7 +46,7 @@ const Account = () => {
 
   return (
     <div className='w-full h-full flex'>
-      <Sidebar />
+      <Sidebar setRefresh={setRefresh} />
 
       <div className="flex-1 p-4 md:ml-64">
         <h1 className='text-4xl font-bold m-8'>Thông tin tài khoản</h1>
