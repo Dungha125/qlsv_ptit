@@ -32,7 +32,9 @@ const Semester = () => {
     try {
       setLoading(true); // Start loading when deleting
       await axios.delete(`https://dtn-event-api.toiyeuptit.com/api/semesters/${semesterId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json'},
       });
       fetchSemes(); // Refetch the semesters list after deletion
     } catch (error) {
