@@ -54,6 +54,7 @@ const ListEvent = () => {
       setError("No token found");
       setLoading(false);
     } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, currentPage]);
 
   const handleEventClick = (eventId) => {
