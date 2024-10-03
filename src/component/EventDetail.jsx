@@ -104,12 +104,12 @@ const EventDetail = () => {
       const response = await axios.post(
         `https://dtn-event-api.toiyeuptit.com/api/events/import`,
         { 
-          event_id: Number(eventId), // Make sure eventId is a valid number
+          event_id: Number(eventId), 
           users: mappedUsers,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Ensure the token is valid
+            Authorization: `Bearer ${token}`, 
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
@@ -119,7 +119,7 @@ const EventDetail = () => {
       setParticipants((prev) => [...prev, ...mappedUsers]);
     } catch (err) {
       console.error('Error uploading data:', err.response ? err.response.data : err.message);
-      // Log the entire error for deeper investigation
+
       if (err.response) {
         console.error('Full error response:', err.response);
       }
