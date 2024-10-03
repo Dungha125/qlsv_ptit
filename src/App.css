@@ -75,3 +75,12 @@
     font-weight: 900;
     font-style: italic;
   }
+
+  .alert-success {
+    color: green;
+  }
+  
+  .alert-error {
+    color: red;
+  }
+  

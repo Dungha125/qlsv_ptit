@@ -1,253 +1,205 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ListUserParticipate from './sources/ListUserParticipate';
-import { useNavigate } from 'react-router-dom';
+import Papa from 'papaparse'; // CSV parsing
+import * as XLSX from 'xlsx'; // XLSX parsing
 import { Alert } from 'antd';
+
 const EventDetail = () => {
-  const { eventId } = useParams(); 
+  const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
   const [participants, setParticipants] = useState([]);
-  const navigate = useNavigate();
+  const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [fileData, setFileData] = useState([]);
+  const [fieldMapping, setFieldMapping] = useState({
+    username: '',
+    last_name: '',
+    first_name: '',
+  });
   const token = localStorage.getItem('authToken');
-  const [alert, setAlert] = useState({visible:false, type: '', message: ''});  
-
-
-  const handleShowPopup = () => {
-    setShowPopup(!showPopup);
-  }
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
-        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}`,
-            {   
-            headers: { 
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json' 
-              }}
-        );
-        setEvent(response.data.data);
-        fetchData();
-      } catch (error) {
-        console.error('Error fetching event details:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (token) {
-        fetchEventDetails();
-      } else {
-        setError("No token found");
-        setLoading(false);
-      }
-    }, [eventId, token]);
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json'
-          }
-        });
-        const dataArray = response.data.data;
-        if (Array.isArray(dataArray)) {
-          setParticipants(dataArray);
-        } else {
-          console.error("Expected 'data' to be an array but received:", dataArray);
-          setError("Unexpected data format");
-        }
-      } catch (error) {
-        console.error('Error fetching participants:', error.response ? error.response.data : error.message);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const handleAddParticipant = async (user) => {
-        try {
-          await axios.post(
-            `https://dtn-event-api.toiyeuptit.com/api/events/import`,
-            {
-              event_id: eventId, 
-              users: [
-                {
-                  username: `${user.username}`,  
-                  last_name: `${user.last_name}`,
-                  first_name: `${user.first_name}`,
-                },
-              ],
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, 
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-          setAlert({
-            visible: true,
-            type: 'success',
-            message: `Đã thêm ${user.last_name} ${user.first_name} vào sự kiện`,
-          });
-          const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: 'application/json'
-            }
-          });
-          setParticipants(response.data.data);
-   
-        } catch (error) {
-          console.error('Error adding participant:', error);
-          setAlert({
-            visible: false,
-            type: 'error',
-            message: `Đã xay ra lỗi khi thêm ${user.last_name} ${user.first_name}`,
-          });
-        }
-      };
-      
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (searchQuery.trim() === '') {
-        setSearchResults([]);
-        return;
-      }
-
-      try {
-        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/users?search=${searchQuery}`, {
+        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
-          }
+          },
         });
-        setSearchResults(response.data.data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-        setSearchResults([]);
+        setEvent(response.data.data);
+        await fetchParticipants();
+      } catch (err) {
+        setError('Error fetching event details');
+      } finally {
+        setLoading(false);
       }
     };
 
-    
-    const debounceTimeout = setTimeout(() => {
-      fetchUsers();
-    }, 500);
+    if (token) fetchEventDetails();
+    else setError("No token found");
+  }, [eventId, token]);
 
-    return () => clearTimeout(debounceTimeout); 
-  }, [searchQuery, token]);
-
-  const handleEventClick = () => {
-    navigate(`/home`);
-  }
-
-  useEffect(() => {
-    let autoCloseTimeout;
-    if (alert.visible) {
-      autoCloseTimeout = setTimeout(() => {
-        setAlert({ ...alert, visible: false });
-      }, 5000);
+  const fetchParticipants = async () => {
+    try {
+      const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      if (Array.isArray(response.data.data)) {
+        setParticipants(response.data.data);
+      } else {
+        setError('Unexpected data format');
+      }
+    } catch (err) {
+      setError('Error fetching participants');
     }
-    return () => clearTimeout(autoCloseTimeout);
-  }, [alert.visible]);
+  };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    const fileExtension = file.name.split('.').pop();
+    if (fileExtension === 'csv') {
+      Papa.parse(file, {
+        header: true,
+        complete: (result) => setFileData(result.data),
+        error: (err) => console.error('Error parsing CSV:', err),
+      });
+    } else if (fileExtension === 'xlsx') {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        setFileData(jsonData);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
 
+  const handleMappingChange = (e) => {
+    const { name, value } = e.target;
+    setFieldMapping((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const mappedUsers = fileData.map((row) => ({
+      username: row[fieldMapping.username],
+      last_name: row[fieldMapping.last_name],
+      first_name: row[fieldMapping.first_name],
+    }));
+  
+    try {
+      const response = await axios.post(
+        `https://dtn-event-api.toiyeuptit.com/api/events/import`,
+        { 
+          event_id: Number(eventId), // Make sure eventId is a valid number
+          users: mappedUsers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Ensure the token is valid
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      setShowUploadPopup(false);
+      setParticipants((prev) => [...prev, ...mappedUsers]);
+    } catch (err) {
+      console.error('Error uploading data:', err.response ? err.response.data : err.message);
+      // Log the entire error for deeper investigation
+      if (err.response) {
+        console.error('Full error response:', err.response);
+      }
+    }
+  };
+  
+
+  const togglePopup = () => {
+    setShowUploadPopup(!showUploadPopup);
+  };
+
+  const handleBackClick = () => {
+    navigate(`/home`);
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="p-4">
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
-      ) : (
-        <div className='w-full h-full p-4'>
-            <div className='w-full bg-red-500 fixed top-0 left-0 h-12'>
-                <button className=' h-12 flex items-center mx-8 text-white font-bold' onClick={handleEventClick}>Quay lại</button>
+      <div className="w-full bg-red-500 fixed top-0 left-0 h-12">
+        <button className="h-12 flex items-center mx-8 text-white font-bold" onClick={handleBackClick}>
+          Quay lại
+        </button>
+      </div>
+
+      <div className="w-full mb-4 mt-8">
+        <h1 className="text-2xl font-bold">{event.name}</h1>
+        <p>{event.description}</p>
+        <p>Địa điểm tổ chức: {event.address}</p>
+        <p>Start: {event.start_at}</p>
+        <p>End: {event.finish_at}</p>
+      </div>
+
+      <button onClick={togglePopup} className="p-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-700">
+        Thêm nhân sự
+      </button>
+
+      <div className="w-full bg-slate-200 rounded-md mt-2">
+        <h1 className="w-full text-center text-xl font-bold p-4">Danh sách nhân sự</h1>
+        <ListUserParticipate participants={participants} />
+      </div>
+
+      {showUploadPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
+            <div className='w-full flex justify-end '>
+            <button onClick={togglePopup} className="text-gray-500 hover:text-gray-700">
+              <span className="text-3xl">&times;</span> {/* This is the "X" character */}
+            </button></div>
+            <h2 className="text-xl font-bold mb-4">Upload File</h2>
+            <input type="file" accept=".csv,.xlsx" onChange={handleFileUpload} className="mb-4" />
+
+            {fileData.length > 0 && (
+              <>
+                <h3 className="text-lg font-bold mb-4">Map Fields</h3>
+                {Object.keys(fieldMapping).map((field) => (
+                  <div key={field} className="mb-4">
+                    <label className="block mb-2">{field}</label>
+                    <select
+                      name={field}
+                      value={fieldMapping[field]}
+                      onChange={handleMappingChange}
+                      className="border rounded w-full p-2"
+                    >
+                      <option value="">Select a field</option>
+                      {Object.keys(fileData[0]).map((fileField) => (
+                        <option key={fileField} value={fileField}>
+                          {fileField}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+                <button onClick={handleSubmit} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                  Submit
+                </button>
+              </>
+            )}
             </div>
-            <div className='w-full mb-4 mt-8'>
-                <h1 className='w-full text-2xl font-bold'>{event.name}</h1>
-                <h2 className='w-full text-sm text-justify text-neutral-900'>{event.description}</h2>
-                <span className='text-neutral-900'>Địa điểm tổ chức: {event.address}</span>
-                <p className='text-gray-900'>Start: {event.start_at}</p>
-                <p>End: {event.finish_at}</p>
-            </div>
-          
-          <button onClick={handleShowPopup} className='p-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-700' >Thêm nhân sự</button>
-
-          <div className='w-full bg-slate-200 rounded-md mt-2'>
-            <h1 className='w-full text-center text-xl font-bold p-4'>Danh sách nhân sự</h1>
-            <ListUserParticipate participants={participants}/>
-          </div>
-          {
-            showPopup && (
-                <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-                    <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
-                        <h1 className='w-full font-bold text-xl'>Thêm nhân sự</h1>
-                        <button
-                            onClick={handleShowPopup}
-                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                            >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <input
-                            type="text"
-                            className="w-full p-2 border rounded"
-                            placeholder="Tìm kiếm nhân sự..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)} 
-                            />
-
-                            <button
-                            onClick={handleShowPopup}
-                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                            >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            </button>
-
-                            {searchResults.length > 0 && (
-                            <div className="mt-4">
-                                <ul className="w-full">
-                                {searchResults.map((user) => (
-                                    <li key={user.id} className="p-2 border-b hover:bg-slate-100" onClick={() => handleAddParticipant(user)}>
-                                    {user.last_name} {user.first_name}
-                                    </li>
-                                ))}
-                                </ul>
-                            </div>
-                            )}
-                            {searchResults.length === 0 && searchQuery && (
-                            <p className="text-gray-500 mt-4">No results found for "{searchQuery}"</p>
-                            )}
-                    </div>
-                </div>
-            )
-          }
-          {alert.visible && (
-            <div className='w-full flex justify-center z-50 top-0 absolute'>
-          <Alert
-            message={alert.message}
-            type={alert.type}
-            showIcon
-            closable
-            onClose={() => setAlert({ ...alert, visible: false })}
-            className="mt-4"
-          /></div>
-        )}
         </div>
       )}
     </div>

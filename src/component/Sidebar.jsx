@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AddEvent from './sources/AddEvent';
 import CreateAccountForm from './sources/CreateAccountOrganization';
+import Papa from 'papaparse'; // Use this for CSV parsing
+import * as XLSX from 'xlsx'; // Use this for Excel parsing
 
 const Sidebar = ({setRefresh}) => {
   const location = useLocation();
@@ -14,6 +16,16 @@ const Sidebar = ({setRefresh}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [fileData, setFileData] = useState([]);
+  const [fieldMapping, setFieldMapping] = useState({
+    last_name: '',
+    first_name: '',
+    username: '',
+    birthday: '',
+    class: '',
+    email: '',
+  });
 
   const handleClickAccount = () => {
     navigate('/account');
@@ -44,6 +56,9 @@ const Sidebar = ({setRefresh}) => {
   const handleAddEvent = () => {
     setRefresh(prev => !prev);
     setShowAddEvent(false); 
+  };
+  const toggleUploadPopup = () => {
+    setShowUploadPopup(!showUploadPopup);
   };
 
   useEffect(() => {
@@ -89,6 +104,74 @@ const Sidebar = ({setRefresh}) => {
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
       setError(error.message);
+    }
+  };
+
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const fileExtension = file.name.split('.').pop();
+
+    if (fileExtension === 'csv') {
+      Papa.parse(file, {
+        header: true,
+        complete: (result) => setFileData(result.data),
+        error: (error) => console.error('Error parsing CSV:', error),
+      });
+    } else if (fileExtension === 'xlsx') {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        setFileData(jsonData);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
+  // Handle field mapping changes
+  const handleMappingChange = (e) => {
+    const { name, value } = e.target;
+    setFieldMapping((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Submit mapped data to API
+  const handleSubmit = async () => {
+    const mappedUsers = fileData.map((row) => ({
+      last_name: row[fieldMapping.last_name],
+      first_name: row[fieldMapping.first_name],
+      username: row[fieldMapping.username],
+      birthday: row[fieldMapping.birthday],
+      class: row[fieldMapping.class],
+      email: row[fieldMapping.email],
+      member_group: '1',
+    }));
+
+    try {
+      const response = await axios.post(
+        'http://dtn-event-api.toiyeuptit.com/api/users/import',
+        {
+          force_update_password: true,
+          users: mappedUsers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('API Response:', response.data);
+      setRefresh((prev) => !prev);
+      toggleUploadPopup(); // Close the popup after success
+    } catch (error) {
+      console.error('Error uploading data:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -140,6 +223,12 @@ const Sidebar = ({setRefresh}) => {
               className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
             >
               Tạo tài khoản
+            </button>
+            <button
+              onClick={toggleUploadPopup}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Upload File
             </button>
           </>
         )}
@@ -204,6 +293,68 @@ const Sidebar = ({setRefresh}) => {
       </div>
     </div>
 )}
+
+      {/*Upload */}
+      {showUploadPopup && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
+      <h2 className="text-xl font-bold mb-4">Upload File</h2>
+      <input
+        type="file"
+        accept=".csv,.xlsx"
+        onChange={handleFileUpload}
+        className="mb-4"
+      />
+
+      {/* Field Mapping */}
+      {fileData.length > 0 && (
+        <>
+          <h3 className="text-lg font-bold mb-4">Map Fields</h3>
+          {Object.keys(fieldMapping).map((field) => (
+            <div key={field} className="mb-4">
+              <label className="block mb-2">{field}</label>
+              <select
+                name={field}
+                value={fieldMapping[field]}
+                onChange={handleMappingChange}
+                className="border rounded w-full p-2"
+              >
+                <option value="">Select a field</option>
+                {Object.keys(fileData[0]).map((fileField) => (
+                  <option key={fileField} value={fileField}>
+                    {fileField}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+          <button
+            onClick={handleSubmit}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Submit
+          </button>
+            </>
+          )}
+
+          <button
+            onClick={toggleUploadPopup}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+
     </>
   );
 };
