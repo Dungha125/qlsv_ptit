@@ -33,7 +33,7 @@ const EventDetail = () => {
           },
         });
         setEvent(response.data.data);
-        await fetchParticipants();
+        await fetchParticipants(); // Fetch participants when event details are fetched
       } catch (err) {
         setError('Error fetching event details');
       } finally {
@@ -94,11 +94,14 @@ const EventDetail = () => {
   };
 
   const handleSubmit = async () => {
+    // Map the file data to match the required structure for the API
     const mappedUsers = fileData.map((row) => ({
       username: row[fieldMapping.username],
       last_name: row[fieldMapping.last_name],
       first_name: row[fieldMapping.first_name],
     }));
+  
+    console.log("Mapped Users:", mappedUsers); // Log the data being sent to the API
   
     try {
       const response = await axios.post(
@@ -115,17 +118,26 @@ const EventDetail = () => {
           },
         }
       );
+      
+      console.log("Response from API:", response.data); // Log the response
+  
       setShowUploadPopup(false);
-      setParticipants((prev) => [...prev, ...mappedUsers]);
+
+      // Refetch participants after successfully uploading
+      setTimeout(() => {
+        fetchParticipants();
+      }, 500); // Optional delay to ensure the backend updates
+
     } catch (err) {
       console.error('Error uploading data:', err.response ? err.response.data : err.message);
-
+  
       if (err.response) {
         console.error('Full error response:', err.response);
+      } else {
+        console.error("No response from server");
       }
     }
   };
-  
 
   const togglePopup = () => {
     setShowUploadPopup(!showUploadPopup);
