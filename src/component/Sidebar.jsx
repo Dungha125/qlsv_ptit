@@ -60,7 +60,6 @@ const Sidebar = ({setRefresh}) => {
   const toggleUploadPopup = () => {
     setShowUploadPopup(!showUploadPopup);
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -175,6 +174,8 @@ const Sidebar = ({setRefresh}) => {
     }
   };
 
+  
+
   return (
     <>
       <button
@@ -232,6 +233,7 @@ const Sidebar = ({setRefresh}) => {
             </button>
           </>
         )}
+        
 
         <div className='w-[90%] h-[52px] rounded-lg bg-slate-100 bottom-4 fixed justify-center items-center'>
           {loading ? (
@@ -239,12 +241,8 @@ const Sidebar = ({setRefresh}) => {
           ) : error ? (
             <p>Error: {error}</p>
           ) : (
-            <div className='w-full p-1 flex'>
-              <span className='text-neutral-700 max-w-[60%]'>
-                <p className='px-4 font-bold truncate'>{account.last_name} {account.first_name}</p>
-                <p className='px-4 font-medium text-sm text-neutral-500'>{account.username}</p>
-              </span>
-              <button onClick={fetchLogout} className='bg-red-500 px-2 rounded-md'>Đăng xuất</button>
+            <div className='w-full h-full p-1 flex'>
+              <button onClick={fetchLogout} className='bg-red-500 w-full h-full rounded-md'>Đăng xuất</button>
             </div>
           )}
         </div>
@@ -354,6 +352,9 @@ const Sidebar = ({setRefresh}) => {
                 </div>
               </div>
             )}
+
+            {/*UploadList*/}
+          
 
     </>
   );
