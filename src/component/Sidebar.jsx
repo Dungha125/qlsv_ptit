@@ -154,7 +154,7 @@ const Sidebar = ({setRefresh}) => {
 
     try {
       const response = await axios.post(
-        'http://dtn-event-api.toiyeuptit.com/api/users/import',
+        'https://dtn-event-api.toiyeuptit.com/api/users/import',
         {
           force_update_password: true,
           users: mappedUsers,
