@@ -25,6 +25,8 @@ const Sidebar = ({setRefresh}) => {
     birthday: '',
     class: '',
     email: '',
+    password: '',
+    member_group: ''
   });
 
   const handleClickAccount = () => {
@@ -37,6 +39,10 @@ const Sidebar = ({setRefresh}) => {
 
   const handleClickHome = () => {
     navigate('/home');
+  };
+
+  const handleClickOrganization = () => {
+    navigate('/organization');
   };
 
   const toggleSidebar = () => {
@@ -148,7 +154,8 @@ const Sidebar = ({setRefresh}) => {
       birthday: row[fieldMapping.birthday],
       class: row[fieldMapping.class],
       email: row[fieldMapping.email],
-      member_group: '1',
+      password: row[fieldMapping.password],
+      member_group: row[fieldMapping.member_group],
     }));
 
     try {
@@ -204,9 +211,13 @@ const Sidebar = ({setRefresh}) => {
 
           {/* Nếu account group === 6 thì hiển thị thêm menu học kỳ */}
           {account.member_group === 6 && (
+            <>
             <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/semester' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
               Học kỳ
             </li>
+            <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
+            Tổ chức
+          </li></>
           )}
         </ul>
 
@@ -223,7 +234,7 @@ const Sidebar = ({setRefresh}) => {
               onClick={handleCreatePopup}
               className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
             >
-              Tạo tài khoản
+              Tạo tổ chức
             </button>
             <button
               onClick={toggleUploadPopup}

@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Descriptions } from 'antd';
 
 const CreateAccountForm = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    status: '0',
-    first_name: '',
-    last_name: '',
-    district: '',
-    province: '',
-    citizen_id: '',
-    address: '',
-    phone: '',
+    name: '',
+    code: '',
     about: '',
-    class: '',
-    gender: '0',
-    sudo: '0',
-    member_group: '',
-    birthday: ''
+    description: '',
+    parent_id: 1,
   });
   const token = localStorage.getItem('authToken');
 
@@ -67,7 +56,7 @@ const CreateAccountForm = () => {
     if (!isMemberGroup6) return; // Ngăn không cho gửi form nếu không phải member group 6
 
     try {
-      const response = await axios.post('https://dtn-event-api.toiyeuptit.com/api/users', formData, {
+      const response = await axios.post('https://dtn-event-api.toiyeuptit.com/api/organizations', formData, {
         headers: {
            Authorization: `Bearer ${token}`,
           'Accept': 'application/json',
@@ -92,62 +81,22 @@ const CreateAccountForm = () => {
       {isMemberGroup6 && (
         <form className='gap-4 flex flex-col' onSubmit={handleSubmit}>
           <div className='mb-4 w-full flex flex-col'>
-            <span>Username</span>
-            <input className='p-2 bg-slate-200' type="text" name="username" placeholder="Username" onChange={handleChange} />
+            <span>Name</span>
+            <input className='p-2 bg-slate-200' type="text" name="name" placeholder="Name" onChange={handleChange} />
           </div>
           <div className='mb-4 w-full flex flex-col'>
-            <span>Email</span>
-            <input className='p-2 bg-slate-200' type="email" name="email" placeholder="Email" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Password</span>
-            <input className='p-2 bg-slate-200' type="password" name="password" placeholder="Password" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>First Name</span>
-            <input className='p-2 bg-slate-200' type="text" name="first_name" placeholder="First Name" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Last Name</span>
-            <input className='p-2 bg-slate-200' type="text" name="last_name" placeholder="Last Name" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>District</span>
-            <input className='p-2 bg-slate-200' type="text" name="district" placeholder="District" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Province</span>
-            <input className='p-2 bg-slate-200' type="text" name="province" placeholder="Province" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Citizen ID</span>
-            <input className='p-2 bg-slate-200' type="number" name="citizen_id" placeholder="Citizen ID" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Address</span>
-            <input className='p-2 bg-slate-200' type="text" name="address" placeholder="Address" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Phone</span>
-            <input className='p-2 bg-slate-200' type="text" name="phone" placeholder="Phone" onChange={handleChange} />
+            <span>Code</span>
+            <input className='p-2 bg-slate-200' type="text" name="code" placeholder="Code" onChange={handleChange} />
           </div>
           <div className='mb-4 w-full flex flex-col'>
             <span>About</span>
-            <input className='p-2 bg-slate-200' type="text" name="about" placeholder="About" onChange={handleChange} />
+            <input className='p-2 bg-slate-200' type="text" name="about" placeholder="about" onChange={handleChange} />
           </div>
           <div className='mb-4 w-full flex flex-col'>
-            <span>Class</span>
-            <input className='p-2 bg-slate-200' type="text" name="class" placeholder="Class" onChange={handleChange} />
+            <span>Description</span>
+            <input className='p-2 bg-slate-200' type="text" name="description" placeholder="Description" onChange={handleChange} />
           </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Birthday</span>
-            <input className='p-2 bg-slate-200' type="text" name="birthday" placeholder="Birthday (YYYY-MM-DD)" onChange={handleChange} />
-          </div>
-          <div className='mb-4 w-full flex flex-col'>
-            <span>Member Group</span>
-            <input className='p-2 bg-slate-200' type="number" name="member_group" placeholder="Member Group" onChange={handleChange} />
-          </div>
-          <button className='bg-red-500 hover:bg-red-700 rounded-md p-2 text-white font-bold' type="submit">Tạo Tài Khoản</button>
+          <button className='bg-red-500 hover:bg-red-700 rounded-md p-2 text-white font-bold' type="submit">Tạo Tổ chức</button>
         </form>
       )}
     </div>

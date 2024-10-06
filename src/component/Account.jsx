@@ -196,7 +196,15 @@ const Account = () => {
                 className='border rounded w-full p-2'
               >
                 <option value="">Chọn đơn vị</option>
-                  <option value="2">LCĐ KHOA CNTT1</option>
+                  <option value="2">LCĐ Công nghệ thông tin 1</option>
+                  <option value="2697">LCĐ Kỹ thuật điện tử 1</option>
+                  <option value="2698">LCĐ Viễn thông 1</option>
+                  <option value="2699">LCĐ Quản trị kinh doanh 1</option>
+                  <option value="2700">LCĐ Tài chính kế toán 1</option>
+                  <option value="2701">LCĐ Viện kinh tế Bưu điện</option>
+                  <option value="2702">LCĐ Viện KHKTBD</option>
+
+
               </select>
           {Object.keys(fieldMapping).map((field) => (
             <div key={field} className="mb-4">

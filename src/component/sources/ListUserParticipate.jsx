@@ -22,7 +22,7 @@ const ListUserParticipate = ({ participants }) => {
             itemLayout="horizontal"
             dataSource={participants}
             renderItem={(participant) => (
-              <List.Item className=' hover:bg-white rounded-md bg-slate-50'>
+              <List.Item className=' hover:bg-white rounded-md bg-slate-50 my-2'>
                 <List.Item.Meta
                   className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
                   title={`${participant.last_name} ${participant.first_name}`}
