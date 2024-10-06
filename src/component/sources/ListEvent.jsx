@@ -117,7 +117,7 @@ const handleDeleteEvent = async (eventId) => {
   return (
     <div className="w-full h-screen flex">
       
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-8">
         <h1 className='w-full text-2xl font-bold mb-4'>Sự kiện</h1>
         {loading ? (
           <Spin size="large" /> 
