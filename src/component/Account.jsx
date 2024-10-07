@@ -143,101 +143,11 @@ const Account = () => {
           <span> Lớp: {account.class} </span>
           <span> Số điện thoại: {account.phone} </span>
         </div>
-         {account.member_group === 6 && (
-          <div className='mt-4 mx-8 '>
-           
-            <button
-              onClick={toggleUploadPopup}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  "
-            >
-              Upload File
-            </button>
-          </div>
-        )}</>
-            )}
-            {showUploadPopup && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-      <div className='w-full flex justify-end'>
-      <button
-            onClick={toggleUploadPopup}
-            className=" text-gray-500 hover:text-gray-700"
-          >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-      </div>
-      <h2 className="text-xl font-bold mb-4">Thêm nhân sự tổ chức</h2>
-      <input
-        type="file"
-        accept=".csv,.xlsx"
-        onChange={handleFileUpload}
-        className="mb-4"
-      />
-
-      {/* Field Mapping */}
-      {fileData.length > 0 && (
-          <div>
-          <h3 className="text-lg font-bold mb-4">Map Fields</h3>
-              <label className='block mb-2'>
-                Đơn vị
-              </label>
-              <select 
-                name="unit" 
-                value={selectedUnitId}
-                onChange={handleUnitChange}
-                className='border rounded w-full p-2'
-              >
-                <option value="">Chọn đơn vị</option>
-                  <option value="2">LCĐ Công nghệ thông tin 1</option>
-                  <option value="2697">LCĐ Kỹ thuật điện tử 1</option>
-                  <option value="2698">LCĐ Viễn thông 1</option>
-                  <option value="2699">LCĐ Quản trị kinh doanh 1</option>
-                  <option value="2700">LCĐ Tài chính kế toán 1</option>
-                  <option value="2701">LCĐ Viện kinh tế Bưu điện</option>
-                  <option value="2702">LCĐ Viện KHKTBD</option>
-
-
-              </select>
-          {Object.keys(fieldMapping).map((field) => (
-            <div key={field} className="mb-4">
-              
-              <label className="block mb-2">{field}</label>
-              <select
-                name={field}
-                value={fieldMapping[field]}
-                onChange={handleMappingChange}
-                className="border rounded w-full p-2"
-              >
-                <option value="">Select a field</option>
-                {Object.keys(fileData[0]).map((fileField) => (
-                  <option key={fileField} value={fileField}>
-                    {fileField}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-          <button
-            onClick={handleSubmit}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Submit
-          </button>
-            </div>
-          )}
-                </div>
-              </div>
-            )}
-      </div>
-    </div>
+        </>)
+      }
+        </div>
+        </div>
+        
   )
 }
 
