@@ -108,7 +108,7 @@ const EditSemesForm = ({ semester, onClose }) => {
         />
       </div>
       <div>
-        <label className='px-2 font-bold'>Bắt đầu:</label>
+        <label className='px-2 font-bold'>Thời gian bắt đầu:</label>
         <input
           type="datetime-local"
           name="start_at"
@@ -117,7 +117,7 @@ const EditSemesForm = ({ semester, onClose }) => {
         />
       </div>
       <div>
-        <label className='px-2 font-bold'>Kết thúc:</label>
+        <label className='px-2 font-bold'>Thời gian kết thúc:</label>
         <input
           type="datetime-local"
           name="finish_at"
