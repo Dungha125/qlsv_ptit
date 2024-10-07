@@ -277,7 +277,7 @@ const Organization = () => {
       {/* Field Mapping */}
       {fileData.length > 0 && (
           <div>
-          <h3 className="text-lg font-bold mb-4">Chọn trường</h3>
+          <h3 className="text-lg font-bold mb-4">Mapping</h3>
               <label className='block mb-2'>
                 Đơn vị
               </label>
