@@ -98,7 +98,7 @@ const TracuuForm = () => {
           <div className='w-full h-[80%]'>
           {events.length > 0 && (
             <>
-            <p>Tổng số sự kiện đã tham gia: {events.length}</p>
+            <p className='mb-4'>Tổng số sự kiện đã tham gia hỗ trợ/ tổ chức: <strong>{events.length}</strong></p>
             <List
             itemLayout="horizontal"
             dataSource={events}
