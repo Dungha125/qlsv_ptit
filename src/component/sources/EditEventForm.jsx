@@ -110,7 +110,7 @@ const EditEventForm = ({ event, onClose }) => {
         />
       </div>
       <div className='w-full'>
-        <label className='px-2 font-bold'>Chi tiết:</label>
+        <label className='px-2 font-bold'>Chi tiết sự kiện:</label>
         <input
           type="text"
           name="description"
