@@ -266,7 +266,7 @@ const Organization = () => {
                     </svg>
                   </button>
       </div>
-      <h2 className="text-xl font-bold mb-4">Thêm nhân sự tổ chức</h2>
+      <h2 className="text-xl font-bold mb-4">Thêm nhân sự</h2>
       <input
         type="file"
         accept=".csv,.xlsx"
