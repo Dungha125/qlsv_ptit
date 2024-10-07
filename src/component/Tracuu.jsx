@@ -2,43 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { logologin, backlogin, logodoan } from '../assets'; // Import logo
 import { useNavigate } from 'react-router-dom';
+import ReCAPTCHA from "react-google-recaptcha";
 
-const Login = () => {
+const Tracuu = () => {
+
+  const key = '6LdGg1kqAAAAACjQRHCtqK71x9-NjCW4qAFCgssh'
+
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [capcharCode, setCapCharCode] = useState(false);
   const [errorMess, setErrorMess] = useState(''); // Hiển thị lỗi
   const navigate = useNavigate();
 
+  function onChange() {
+    setCapCharCode(true);
+  }
 
-  const submitForm = async (e) => {
-    e.preventDefault();
-    const trimmedPassword = password.replace(/\s+/g, ''); // Loại bỏ khoảng trắng
-    if (trimmedPassword.length < 5) {
-      setErrorMess('Password must be at least 5 characters long (excluding spaces)');
-      return;
-    }
-    await fetchApiLogin(); // Gọi API nếu hợp lệ
-  };
 
-  const fetchApiLogin = async () => {
-    try {
-      const response = await axios.post(
-        'https://dtn-event-api.toiyeuptit.com/api/auth/login',
-        { username, password }
-      );
 
-      if (response.data){
-        const token = response.data.access_token;
-        localStorage.setItem('authToken', token);  // Lưu token
-        navigate('/home');
-      } else {
-        setErrorMess('Invalid credentials');
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMess('Login failed. Please try again.');
-    }
-  };
 
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
@@ -48,10 +28,10 @@ const Login = () => {
       </span>
       
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4 md:p-12'>
-        <h1 className='text-2xl w-full text-center font-bold text-neutral-800'>Đăng nhập</h1>
+        <h1 className='text-2xl w-full text-center font-bold text-neutral-800'>Tra cứu</h1>
         {errorMess && <p className='text-red-600 text-center mb-4'>{errorMess}</p>}
         
-        <form onSubmit={submitForm} className='w-full'>
+        <form className='w-full'>
           <div className='w-full p-2 gap-4'>
             <label htmlFor="username" className='block mb-2'>Username</label>
             <input 
@@ -66,24 +46,16 @@ const Login = () => {
             />
           </div>
 
-          <div className='w-full p-2 gap-4'>
-            <label htmlFor="password" className='block mb-2'>Password</label>
-            <input
-              type="password" 
-              name="password" 
-              id="password" 
-              className='w-full rounded-md p-2 border border-gray-300' 
-              placeholder='Nhập password' 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required 
+
+          <ReCAPTCHA
+                sitekey={key}
+                onChange={onChange}
             />
-          </div>
 
           <button 
             type='submit'
             className='bg-red-600 w-full px-4 py-2 text-white rounded-md mt-4'>
-            Đăng nhập
+            Tra cứu
           </button>
         </form>
       </div>
@@ -93,4 +65,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Tracuu;

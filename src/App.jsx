@@ -9,6 +9,7 @@ import Account from './component/Account.jsx';
 import Semester from './component/Semester.jsx';
 import SemesterDetail from './component/SemesterDetail.jsx';
 import Organization from './component/Organization.jsx';
+import Tracuu from './component/Tracuu.jsx';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/semester" element={<Semester/>} />
         <Route path="/semester/:semesterId" element={<SemesterDetail />} />
         <Route path="/organization" element={<Organization />} />
+        <Route path="/tracuu" element={<Tracuu />} />
       </Routes>
     </Router>
   );

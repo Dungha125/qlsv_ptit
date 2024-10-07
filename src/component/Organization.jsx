@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Sidebar from './Sidebar';
 import { List, Pagination, Spin } from 'antd';
-import Papa from 'papaparse'; // Use this for CSV parsing
-import * as XLSX from 'xlsx'; // Use this for Excel parsing
+import Papa from 'papaparse'; 
+import * as XLSX from 'xlsx'; 
 
 const Organization = () => {
   const [refresh, setRefresh] = useState(false);
@@ -19,6 +19,7 @@ const Organization = () => {
     role_list: '',
   });
   const [selectedUnitId, setSelectedUnitId] = useState("");
+  const [selectedOrga, setSelectedOrga] = useState("");
   const [showListUser, setShowListUser] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); 
   const [totalEvents, setTotalEvents] = useState(0); 
@@ -112,14 +113,14 @@ const Organization = () => {
   };
 
   useEffect(() => {
-    if (selectedUnitId) {
-      fetchList(selectedUnitId);
+    if (selectedOrga) {
+      fetchList(selectedOrga);
     }
-  }, [currentPage, selectedUnitId]);
+  }, [currentPage, selectedOrga]);
 
 
   const toggleShowListUser = (organizationId) => {
-    setSelectedUnitId(organizationId); 
+    setSelectedOrga(organizationId); 
     setCurrentPage(1);  
   };
 
@@ -288,11 +289,11 @@ const Organization = () => {
               >
                 <option value="">Chọn đơn vị</option>
                   <option value="2">LCĐ Công nghệ thông tin 1</option>
-                  <option value="2697">LCĐ Kỹ thuật Điện tử 1</option>
-                  <option value="2698">LCĐ Viễn thông 1</option>
+                  <option value="3">LCĐ Kỹ thuật Điện tử 1</option>
+                  <option value="4">LCĐ Viễn thông 1</option>
                   <option value="2699">LCĐ Quản trị kinh doanh 1</option>
                   <option value="2700">LCĐ Tài chính kế toán 1</option>
-                  <option value="2701">LCĐ Viện kinh tế Bưu điện</option>
+                  <option value="5">LCĐ Viện kinh tế Bưu điện</option>
                   <option value="2702">LCĐ Viện KHKTBD</option>
 
 

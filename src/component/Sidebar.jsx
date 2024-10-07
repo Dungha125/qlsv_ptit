@@ -206,7 +206,7 @@ const Sidebar = ({setRefresh}) => {
             Tài khoản
           </li>
           <li onClick={handleClickHome} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/home' ? 'bg-white text-neutral-900' : 'bg-none hover:bg-gray-700'}`}>
-            Sự kiện
+            {account.member_group === 6 ? 'Sự kiện' : 'Sự kiện đã tham gia'}
           </li>
 
           {/* Nếu account group === 6 thì hiển thị thêm menu học kỳ */}

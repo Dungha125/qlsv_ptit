@@ -4,7 +4,7 @@ import { List, Spin, Pagination, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import EditEventForm from './EditEventForm';
 
-const ListEvent = () => {
+const ListEvent = ({setUser}) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
@@ -15,6 +15,7 @@ const ListEvent = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const token = localStorage.getItem('authToken');
   const navigate = useNavigate();
+  
 
   //số trang
   const fetchData = async () => {
