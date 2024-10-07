@@ -99,7 +99,7 @@ const TracuuForm = () => {
             
             <div className='w-[80%] flex flex-col bg-white rounded-lg p-4'>
           <div className='w-full h-[80%]'>
-            <p className='mb-4'>Tổng số sự kiện đã tham gia hỗ trợ/ tổ chức: <strong>{events.length}</strong></p>
+            <p className='mb-4'>Tổng số hoạt động đã tham gia: <strong>{events.length}</strong></p>
             <List
             itemLayout="horizontal"
             dataSource={events}
