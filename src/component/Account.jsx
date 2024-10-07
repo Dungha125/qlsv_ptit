@@ -174,7 +174,7 @@ const Account = () => {
                     </svg>
                   </button>
       </div>
-      <h2 className="text-xl font-bold mb-4">Upload File</h2>
+      <h2 className="text-xl font-bold mb-4">Thêm nhân sự tổ chức</h2>
       <input
         type="file"
         accept=".csv,.xlsx"
