@@ -10,8 +10,6 @@ import Semester from './component/Semester.jsx';
 import SemesterDetail from './component/SemesterDetail.jsx';
 import Organization from './component/Organization.jsx';
 
-
-
 function App() {
   return (
     <Router>
