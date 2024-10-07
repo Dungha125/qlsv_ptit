@@ -182,7 +182,7 @@ const EventDetail = () => {
             <button onClick={togglePopup} className="text-gray-500 hover:text-gray-700">
               <span className="text-3xl">&times;</span> {/* This is the "X" character */}
             </button></div>
-            <h2 className="text-xl font-bold mb-4">Upload Files</h2>
+            <h2 className="text-xl font-bold mb-4">Upload </h2>
             <input type="file" accept=".csv,.xlsx" onChange={handleFileUpload} className="mb-4" />
 
             {fileData.length > 0 && (
