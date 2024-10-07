@@ -94,10 +94,11 @@ const TracuuForm = () => {
         ) : error ? (
           <p>Error: {error}</p> 
         ) : (
-          <div className='w-[80%] flex flex-col bg-white rounded-lg p-4'>
-          <div className='w-full h-[80%]'>
+          <>
           {events.length > 0 && (
-            <>
+            
+            <div className='w-[80%] flex flex-col bg-white rounded-lg p-4'>
+          <div className='w-full h-[80%]'>
             <p className='mb-4'>Tổng số sự kiện đã tham gia hỗ trợ/ tổ chức: <strong>{events.length}</strong></p>
             <List
             itemLayout="horizontal"
@@ -112,9 +113,10 @@ const TracuuForm = () => {
               </List.Item>
              
             )}
-          /></>)}
+          />
           </div>
-          </div>
+          </div>)}
+          </>
         )
       }
       {/*{events.length > 0 && (
