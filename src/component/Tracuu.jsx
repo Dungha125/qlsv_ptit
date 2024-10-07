@@ -55,7 +55,7 @@ const TracuuForm = () => {
 
   return (
     <div className="lookup-container">
-      <h1>Lookup Information</h1>
+      <h1>Tra cứu</h1>
       <form onSubmit={handleSubmit}>
         {errorMess && <p className="error-message">{errorMess}</p>} 
         <div>
