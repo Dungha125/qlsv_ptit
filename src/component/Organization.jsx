@@ -221,7 +221,7 @@ const Organization = () => {
           </div>
           {showListUser && (
             <div className='h-full mx-4 mt-4 w-full rounded-xl bg-slate-50 p-4'>
-              <h1 className='mb-4 text-xl font-bold'>Danh sách nhân sự đơn vị </h1>
+              <h1 className='mb-4 text-xl font-bold'>Danh sách nhân sự</h1>
               <List
               itemLayout="horizontal"
               dataSource={listUser}
