@@ -60,7 +60,7 @@ const TracuuForm = () => {
       </span>
       
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 md:p-12'>
-        <h1 className='text-2xl w-full text-center font-bold text-neutral-800 mb-4'>Tra cứu</h1>
+        <h1 className='text-2xl w-full text-center font-bold text-neutral-800 mb-4'>Tra cứu hoạt động</h1>
         {errorMess && <p className='text-red-600 text-center mb-4'>{errorMess}</p>}
         
         <form onSubmit={handleSubmit} className='flex justify-center items-center gap-4'>
