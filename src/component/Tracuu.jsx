@@ -1,66 +1,96 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { logologin, backlogin, logodoan } from '../assets'; // Import logo
-import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
 
 const Tracuu = () => {
+  const reCaptchaKey = '6LdGg1kqAAAAACjQRHCtqK71x9-NjCW4qAFCgssh'; // Your reCAPTCHA site key
+  const [name, setName] = useState(""); 
+  const [capVal, setCapVal] = useState("");
+  const [errorMess, setErrorMess] = useState(''); 
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null); // State to store the API response
 
-  const key = '6LdGg1kqAAAAACjQRHCtqK71x9-NjCW4qAFCgssh'
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMess('');
+    setResult(null); // Reset previous result
 
-  const [username, setUsername] = useState('');
-  const [capcharCode, setCapCharCode] = useState(false);
-  const [errorMess, setErrorMess] = useState(''); // Hiển thị lỗi
-  const navigate = useNavigate();
+    if (!capVal) {
+      setErrorMess('Please complete the CAPTCHA.');
+      setLoading(false);
+      return;
+    }
 
-  function onChange() {
-    setCapCharCode(true);
-  }
+    try {
+      // Make API request here
+      const response = await axios.post('http://dtn-event-api.toiyeuptit.com/api/retrieve', {
+        username: name,
+        s: "string", 
+        with_trashed: true,
+        only_trashed: true,
+        per_page: "10",
+        page: 0,
+        "g-recaptcha-response": capVal,
+      }, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
 
-
-
+      setResult(response.data); // Store the API response
+      console.log('API Response:', response.data);
+      
+    } catch (err) {
+      setErrorMess('An error occurred while fetching data. Please try again.');
+      console.error('API Error:', err);
+    } finally {
+      setLoading(false); // Reset loading state
+      setName(""); // Optionally reset form fields
+      setCapVal(""); 
+    }
+  };
 
   return (
-    <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
-      <span className='flex flex-row gap-5'>
-        <img src={logologin} width={75} height={75} alt="logo ptit" className='mb-[2rem] object-contain' />
-        <img src={logodoan} width={90} height={90} alt="logo doan" className='mb-[2rem] object-contain' />
-      </span>
-      
-      <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4 md:p-12'>
-        <h1 className='text-2xl w-full text-center font-bold text-neutral-800'>Tra cứu</h1>
-        {errorMess && <p className='text-red-600 text-center mb-4'>{errorMess}</p>}
+    <div className="lookup-container">
+      <h1>Lookup Information</h1>
+      <form onSubmit={handleSubmit}>
+        {errorMess && <p className="error-message">{errorMess}</p>} {/* Show error message */}
+        <div>
+          <label htmlFor="name">Enter your username:</label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter your name"
+            name="name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
+        </div>
         
-        <form className='w-full'>
-          <div className='w-full p-2 gap-4'>
-            <label htmlFor="username" className='block mb-2'>Username</label>
-            <input 
-              type="text" 
-              name="username" 
-              id="username" 
-              className='w-full rounded-md p-2 border border-gray-300' 
-              placeholder='Nhập username' 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required 
-            />
-          </div>
+        <ReCAPTCHA
+          sitekey={reCaptchaKey}
+          onChange={(val) => setCapVal(val)}
+        />
 
+        <div>
+          <input
+            type="submit"
+            value="Send"
+            disabled={!capVal || loading} // Disable if CAPTCHA is not completed or while loading
+          />
+        </div>
+      </form>
 
-          <ReCAPTCHA
-                sitekey={key}
-                onChange={onChange}
-            />
-
-          <button 
-            type='submit'
-            className='bg-red-600 w-full px-4 py-2 text-white rounded-md mt-4'>
-            Tra cứu
-          </button>
-        </form>
-      </div>
-
-      <img src={backlogin} alt="backlogin" className='absolute object-cover w-screen h-screen opacity-30 -z-[10]' />
+      {/* Show result if available */}
+      {result && (
+        <div className="result-section">
+          <h2>Results</h2>
+          <pre>{JSON.stringify(result, null, 2)}</pre> {/* Displaying the result */}
+        </div>
+      )}
     </div>
   );
 };
