@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { logologin, backlogin, logodoan } from '../assets'; 
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { List, Spin, Pagination, Modal } from 'antd';
+import { List, Spin} from 'antd';
 
 const TracuuForm = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
