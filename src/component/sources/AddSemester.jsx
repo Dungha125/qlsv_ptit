@@ -106,7 +106,7 @@ const AddSemester = () => {
 
         <div className='mb-4'>
             <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventDescription'>
-                Chi tiết
+                Chi tiết học kỳ
             </label>
             <textarea
                 id='eventDescription'
