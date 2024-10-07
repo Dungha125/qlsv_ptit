@@ -66,7 +66,7 @@ const TracuuForm = () => {
         <form onSubmit={handleSubmit} className='flex justify-center items-center gap-4'>
         {errorMess && <p className="error-message">{errorMess}</p>} 
         <div> 
-          <label htmlFor="name" className='mx-2'>Username:</label>
+          <label htmlFor="name" className='mx-2 font-bold'>Username:</label>
           <input
             type="text"
             id="name"
