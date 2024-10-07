@@ -96,7 +96,7 @@ const CreateAccountForm = () => {
             <span>Description</span>
             <input className='p-2 bg-slate-200' type="text" name="description" placeholder="Description" onChange={handleChange} />
           </div>
-          <button className='bg-red-500 hover:bg-red-700 rounded-md p-2 text-white font-bold' type="submit">Tạo Tổ chức</button>
+          <button className='bg-red-500 hover:bg-red-700 rounded-md p-2 text-white font-bold' type="submit">Tạo tổ chức</button>
         </form>
       )}
     </div>
