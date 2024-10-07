@@ -68,7 +68,7 @@ const EditSemesForm = ({ semester, onClose }) => {
       <h2 className='text-xl font-bold w-full text-center mt-2'>Chỉnh sửa học kỳ</h2>
       {error && <p>Error: {error}</p>}
       <div className='w-full'>
-        <label className='px-2 font-bold'>Tên học kỳ:</label>
+        <label className='px-2 font-bold'>Tên của học kỳ:</label>
         <input
           type="text"
           name="name"
