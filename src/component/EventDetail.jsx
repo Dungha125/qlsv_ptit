@@ -26,7 +26,7 @@ const EventDetail = () => {
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
-        const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}`, {
+        const response = await axios.get(`https://qldv-api.toiyeuptit.com/api/events/${eventId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
@@ -47,7 +47,7 @@ const EventDetail = () => {
 
   const fetchParticipants = async () => {
     try {
-      const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}/user`, {
+      const response = await axios.get(`https://qldv-api.toiyeuptit.com/api/events/${eventId}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',
@@ -105,7 +105,7 @@ const EventDetail = () => {
   
     try {
       const response = await axios.post(
-        `https://dtn-event-api.toiyeuptit.com/api/events/import`,
+        `https://qldv-api.toiyeuptit.com/api/events/import`,
         { 
           event_id: Number(eventId), 
           users: mappedUsers,

@@ -26,7 +26,7 @@ const CreateAccountForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/auth/profile', {
+        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/auth/profile', {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -56,7 +56,7 @@ const CreateAccountForm = () => {
     if (!isMemberGroup6) return; // Ngăn không cho gửi form nếu không phải member group 6
 
     try {
-      const response = await axios.post('https://dtn-event-api.toiyeuptit.com/api/organizations', formData, {
+      const response = await axios.post('https://qldv-api.toiyeuptit.com/api/organizations', formData, {
         headers: {
            Authorization: `Bearer ${token}`,
           'Accept': 'application/json',

@@ -48,7 +48,7 @@ const EditSemesForm = ({ semester, onClose }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(`http://dtn-event-api.toiyeuptit.com/api/semesters/${semester.id}`, formData, {
+      await axios.put(`https://qldv-api.toiyeuptit.com/api/semesters/${semester.id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

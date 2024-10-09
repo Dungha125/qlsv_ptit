@@ -25,7 +25,7 @@ const EditEventForm = ({ event, onClose }) => {
   useEffect(() => {
     const fetchSemesters = async () => {
       try {
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/semesters', {
+        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/semesters', {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
@@ -70,7 +70,7 @@ const EditEventForm = ({ event, onClose }) => {
     };
 
     try {
-      await axios.put(`https://dtn-event-api.toiyeuptit.com/api/events/${event.id}`, formattedFormData, {
+      await axios.put(`https://qldv-api.toiyeuptit.com/api/events/${event.id}`, formattedFormData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

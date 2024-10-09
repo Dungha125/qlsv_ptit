@@ -23,7 +23,7 @@ const Login = () => {
   const fetchApiLogin = async () => {
     try {
       const response = await axios.post(
-        'https://dtn-event-api.toiyeuptit.com/api/auth/login',
+        'https://qldv-api.toiyeuptit.com/api/auth/login',
         { username, password }
       );
 

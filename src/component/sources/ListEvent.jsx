@@ -21,7 +21,7 @@ const ListEvent = ({setUser}) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
+      const response = await axios.get('https://qldv-api.toiyeuptit.com/api/events', {
         headers: { 
           Authorization: `Bearer ${token}`,
           Accept: 'application/json' 
@@ -70,7 +70,7 @@ const ListEvent = ({setUser}) => {
 const handleDeleteEvent = async (eventId) => {
   try {
     setLoading(true); // Bắt đầu loading khi xóa
-    await axios.delete(`https://dtn-event-api.toiyeuptit.com/api/events/${eventId}`, {
+    await axios.delete(`https://qldv-api.toiyeuptit.com/api/events/${eventId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -79,7 +79,7 @@ const handleDeleteEvent = async (eventId) => {
 
     // Nếu số lượng sự kiện hiện tại ít hơn số lượng mục trên 1 trang, lấy thêm sự kiện từ trang tiếp theo
     if (updatedEvents.length < 10 && currentPage < totalPages) {
-      const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
+      const response = await axios.get('https://qldv-api.toiyeuptit.com/api/events', {
         headers: { 
           Authorization: `Bearer ${token}`,
           Accept: 'application/json' 

@@ -17,7 +17,7 @@ const AddEvent = ({ onAddEvent }) => {
     useEffect(() => {
         const fetchSemesters = async () => {
             try {
-                const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/semesters', {
+                const response = await axios.get('https://qldv-api.toiyeuptit.com/api/semesters', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -60,7 +60,7 @@ const AddEvent = ({ onAddEvent }) => {
 
         try {
             const response = await axios.post(
-                'https://dtn-event-api.toiyeuptit.com/api/events',
+                'https://qldv-api.toiyeuptit.com/api/events',
                 {
                     name: sanitizeAlphaSpaces(eventName),
                     organization: sanitizeAlphaSpaces(eventOrganization),

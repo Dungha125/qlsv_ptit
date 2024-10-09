@@ -31,7 +31,7 @@ const Semester = () => {
   const handleDeleteSemester = async (semesterId) => {
     try {
       setLoading(true); // Start loading when deleting
-      await axios.delete(`https://dtn-event-api.toiyeuptit.com/api/semesters/${semesterId}`, {
+      await axios.delete(`https://qldv-api.toiyeuptit.com/api/semesters/${semesterId}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           Accept: 'application/json'},
@@ -56,7 +56,7 @@ const Semester = () => {
 
   const fetchSemes = useCallback(async () => {
     try {
-      const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/semesters', {
+      const response = await axios.get('https://qldv-api.toiyeuptit.com/api/semesters', {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',

@@ -41,7 +41,7 @@ const Organization = () => {
   useEffect(()=>{
     const fecthOrgani = async () => {
       try{
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/organizations',
+        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/organizations',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ const Organization = () => {
   const fetchList = async (organizationId) => {
     setLoading(true); // Set loading state while fetching data
     try {
-      const response = await axios.get(`https://dtn-event-api.toiyeuptit.com/api/organizations/${organizationId}/user_list`, {
+      const response = await axios.get(`https://qldv-api.toiyeuptit.com/api/organizations/${organizationId}/user_list`, {
         params: {
           page: currentPage,
           per_page: 10 
@@ -165,7 +165,7 @@ const Organization = () => {
 
     try {
       const response = await axios.post(
-        `https://dtn-event-api.toiyeuptit.com/api/organizations/${selectedUnitId}/store_student`,
+        `https://qldv-api.toiyeuptit.com/api/organizations/${selectedUnitId}/store_student`,
         { 
           username_list: mappedUsers.map(user => user.username_list),
           role_list: mappedUsers.map(user => user.role_list[0]) // Extract role list array properly
@@ -291,10 +291,10 @@ const Organization = () => {
                   <option value="2">LCĐ Công nghệ thông tin 1</option>
                   <option value="3">LCĐ Kỹ thuật Điện tử 1</option>
                   <option value="4">LCĐ Viễn thông 1</option>
-                  <option value="2699">LCĐ Quản trị kinh doanh 1</option>
-                  <option value="2700">LCĐ Tài chính kế toán 1</option>
+                  <option value="6">LCĐ Quản trị kinh doanh 1</option>
+                  <option value="7">LCĐ Tài chính kế toán 1</option>
                   <option value="5">LCĐ Viện kinh tế Bưu điện</option>
-                  <option value="2702">LCĐ Viện KHKTBD</option>
+                  <option value="8">LCĐ Viện KHKTBD</option>
 
 
               </select>

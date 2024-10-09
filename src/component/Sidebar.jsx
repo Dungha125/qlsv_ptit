@@ -69,7 +69,7 @@ const Sidebar = ({setRefresh}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/auth/profile', {
+        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/auth/profile', {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -98,7 +98,7 @@ const Sidebar = ({setRefresh}) => {
 
   const fetchLogout = async () => {
     try {
-      await axios.post('https://dtn-event-api.toiyeuptit.com/api/auth/logout', {}, {
+      await axios.post('https://qldv-api.toiyeuptit.com/api/auth/logout', {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',
@@ -160,7 +160,7 @@ const Sidebar = ({setRefresh}) => {
 
     try {
       const response = await axios.post(
-        'https://dtn-event-api.toiyeuptit.com/api/users/import',
+        'https://qldv-api.toiyeuptit.com/api/users/import',
         {
           force_update_password: true,
           users: mappedUsers,

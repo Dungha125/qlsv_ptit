@@ -32,7 +32,7 @@ const Account = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/auth/profile', {
+        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/auth/profile', {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -100,7 +100,7 @@ const Account = () => {
 
     try {
       const response = await axios.post(
-        `https://dtn-event-api.toiyeuptit.com/api/organizations/${selectedUnitId}/store_student`,
+        `https://qldv-api.toiyeuptit.com/api/organizations/${selectedUnitId}/store_student`,
         { 
           username_list: mappedUsers.map(user => user.username_list),
           role_list: mappedUsers.map(user => user.role_list[0]) // Extract role list array properly

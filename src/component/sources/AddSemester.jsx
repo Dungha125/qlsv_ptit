@@ -31,7 +31,7 @@ const AddSemester = () => {
         };
     
         try {
-            await axios.post('https://dtn-event-api.toiyeuptit.com/api/semesters', 
+            await axios.post('https://qldv-api.toiyeuptit.com/api/semesters', 
                 {
                     name: sanitizeAlphaSpaces(semesterName),
                     code: semesterCode,

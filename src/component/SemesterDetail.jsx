@@ -21,7 +21,7 @@ const SemesterDetail = () => {
 
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('https://dtn-event-api.toiyeuptit.com/api/events', {
+                const response = await axios.get('https://qldv-api.toiyeuptit.com/api/events', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',

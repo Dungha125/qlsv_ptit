@@ -27,7 +27,7 @@ const TracuuForm = () => {
     try {
       const recaptchaToken = await executeRecaptcha('submit');
 
-      const response = await axios.post('https://dtn-event-api.toiyeuptit.com/api/retrieve', {
+      const response = await axios.post('https://qldv-api.toiyeuptit.com/api/retrieve', {
         username: name,
         s: null, // Optional search query, can be modified based on user input
         with_trashed: true,
