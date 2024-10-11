@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Papa from 'papaparse'; // Use this for CSV parsing
 import * as XLSX from 'xlsx'; // Use this for Excel parsing
+import { AppConfigContext } from 'antd/es/app/context';
 
 const Account = () => {
   const [refresh, setRefresh] = useState(false);
@@ -18,6 +19,7 @@ const Account = () => {
     role_list: '',
   });
   const [selectedUnitId, setSelectedUnitId] = useState("");
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const toggleUploadPopup = () => {
     setShowUploadPopup(!showUploadPopup);
@@ -32,7 +34,7 @@ const Account = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/auth/profile', {
+        const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -100,7 +102,7 @@ const Account = () => {
 
     try {
       const response = await axios.post(
-        `https://qldv-api.toiyeuptit.com/api/organizations/${selectedUnitId}/store_student`,
+        `${API_BASE_URL}/organizations/${selectedUnitId}/store_student`,
         { 
           username_list: mappedUsers.map(user => user.username_list),
           role_list: mappedUsers.map(user => user.role_list[0]) // Extract role list array properly

@@ -13,6 +13,8 @@ const AddSemester = () => {
     const [message, setMessage] = useState('');
     const token = localStorage.getItem('authToken');
 
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
     const handleCreateSemester = async (e) => {
         e.preventDefault();
@@ -27,11 +29,11 @@ const AddSemester = () => {
     
         const sanitizeAlphaSpaces = (text) => {
             // Giữ lại các ký tự chữ cái, số, khoảng trắng và các dấu đặc biệt phổ biến
-            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
+            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚỤĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
         };
     
         try {
-            await axios.post('https://qldv-api.toiyeuptit.com/api/semesters', 
+            await axios.post(`${API_BASE_URL}/semesters`, 
                 {
                     name: sanitizeAlphaSpaces(semesterName),
                     code: semesterCode,

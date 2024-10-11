@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const sanitizeAlphaSpaces = (text) => {
   // Keep letters, numbers, spaces, and common special characters
-  return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
+  return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚỤĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
 };
 
 const EditEventForm = ({ event, onClose }) => {
@@ -20,12 +20,13 @@ const EditEventForm = ({ event, onClose }) => {
   const [error, setError] = useState(null);
   const [semesters, setSemesters] = useState([]);
   const token = localStorage.getItem('authToken');
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Fetch semesters from API
   useEffect(() => {
     const fetchSemesters = async () => {
       try {
-        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/semesters', {
+        const response = await axios.get(`${API_BASE_URL}/semesters`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
@@ -70,7 +71,7 @@ const EditEventForm = ({ event, onClose }) => {
     };
 
     try {
-      await axios.put(`https://qldv-api.toiyeuptit.com/api/events/${event.id}`, formattedFormData, {
+      await axios.put(`${API_BASE_URL}/events/${event.id}`, formattedFormData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

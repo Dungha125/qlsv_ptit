@@ -15,6 +15,7 @@ const CreateAccountForm = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isMemberGroup6, setIsMemberGroup6] = useState(false);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleChange = (e) => {
     setFormData({
@@ -26,7 +27,7 @@ const CreateAccountForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/auth/profile', {
+        const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -56,7 +57,7 @@ const CreateAccountForm = () => {
     if (!isMemberGroup6) return; // Ngăn không cho gửi form nếu không phải member group 6
 
     try {
-      const response = await axios.post('https://qldv-api.toiyeuptit.com/api/organizations', formData, {
+      const response = await axios.post(`${API_BASE_URL}/organizations`, formData, {
         headers: {
            Authorization: `Bearer ${token}`,
           'Accept': 'application/json',

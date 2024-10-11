@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const sanitizeAlphaSpaces = (text) => {
   // Giữ lại các ký tự chữ cái, số, khoảng trắng và các dấu đặc biệt phổ biến
-  return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
+  return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚỤĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
 };
 
 const EditSemesForm = ({ semester, onClose }) => {
@@ -29,6 +29,7 @@ const EditSemesForm = ({ semester, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('authToken');
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Hàm xử lý thay đổi input
   const handleInputChange = (e) => {
@@ -48,7 +49,7 @@ const EditSemesForm = ({ semester, onClose }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(`https://qldv-api.toiyeuptit.com/api/semesters/${semester.id}`, formData, {
+      await axios.put(`${API_BASE_URL}/semesters/${semester.id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

@@ -14,10 +14,13 @@ const AddEvent = ({ onAddEvent }) => {
 
     const token = localStorage.getItem('authToken');
 
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+
     useEffect(() => {
         const fetchSemesters = async () => {
             try {
-                const response = await axios.get('https://qldv-api.toiyeuptit.com/api/semesters', {
+                const response = await axios.get(`${API_BASE_URL}/semesters`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -54,13 +57,13 @@ const AddEvent = ({ onAddEvent }) => {
 
   
         const sanitizeAlphaSpaces = (text) => {
-            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, ''); //chưa thêm dấu đặc biệt được
+            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚỤĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, ''); //chưa thêm dấu đặc biệt được
             
         };
 
         try {
             const response = await axios.post(
-                'https://qldv-api.toiyeuptit.com/api/events',
+                `${API_BASE_URL}/events`,
                 {
                     name: sanitizeAlphaSpaces(eventName),
                     organization: sanitizeAlphaSpaces(eventOrganization),
