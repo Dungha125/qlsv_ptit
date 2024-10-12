@@ -8,7 +8,6 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.20.5",
     "axios": "^1.7.7",
-    "dotenv": "^16.4.5",
     "moment": "^2.30.1",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",
@@ -22,8 +21,8 @@
     "xregexp": "^5.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "webpack",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,13 +50,18 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.25.7",
     "autoprefixer": "^10.4.20",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
+    "dotenv": "^16.4.5",
+    "dotenv-webpack": "^8.1.0",
     "html-webpack-plugin": "^5.6.0",
     "javascript-obfuscator": "^4.1.1",
     "postcss-loader": "^8.1.1",
     "style-loader": "^4.0.0",
     "tailwindcss": "^3.4.13",
     "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   }
 }
