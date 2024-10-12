@@ -82,7 +82,7 @@ const CreateAccountForm = () => {
       {isMemberGroup6 && (
         <form className='gap-4 flex flex-col' onSubmit={handleSubmit}>
           <div className='mb-4 w-full flex flex-col'>
-            <span>Name</span>
+            <span>Tên tổ chức</span>
             <input className='p-2 bg-slate-200' type="text" name="name" placeholder="Name" onChange={handleChange} />
           </div>
           <div className='mb-4 w-full flex flex-col'>
@@ -90,11 +90,11 @@ const CreateAccountForm = () => {
             <input className='p-2 bg-slate-200' type="text" name="code" placeholder="Code" onChange={handleChange} />
           </div>
           <div className='mb-4 w-full flex flex-col'>
-            <span>About</span>
+            <span>Thông tin</span>
             <input className='p-2 bg-slate-200' type="text" name="about" placeholder="about" onChange={handleChange} />
           </div>
           <div className='mb-4 w-full flex flex-col'>
-            <span>Description</span>
+            <span>Mô tả</span>
             <input className='p-2 bg-slate-200' type="text" name="description" placeholder="Description" onChange={handleChange} />
           </div>
           <button className='bg-red-500 hover:bg-red-700 rounded-md p-2 text-white font-bold' type="submit">Tạo tổ chức</button>

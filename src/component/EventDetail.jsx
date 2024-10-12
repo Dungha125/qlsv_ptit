@@ -164,8 +164,8 @@ const EventDetail = () => {
         <h1 className="text-2xl font-bold">{event.name}</h1>
         <p>{event.description}</p>
         <p>Địa điểm tổ chức: {event.address}</p>
-        <p>Start: {event.start_at}</p>
-        <p>End: {event.finish_at}</p>
+        <p>Bắt đầu: {event.start_at}</p>
+        <p>Kết thúc: {event.finish_at}</p>
       </div>
 
       <button onClick={togglePopup} className={`p-3 rounded-lg ${UserId == 1 ? '':'hidden'} font-bold text-white bg-red-500 hover:bg-red-700`}>
@@ -184,12 +184,12 @@ const EventDetail = () => {
             <button onClick={togglePopup} className="text-gray-500 hover:text-gray-700">
               <span className="text-3xl">&times;</span> {/* This is the "X" character */}
             </button></div>
-            <h2 className="text-xl font-bold mb-4">Upload </h2>
+            <h2 className="text-xl font-bold mb-4">Tải file</h2>
             <input type="file" accept=".csv,.xlsx" onChange={handleFileUpload} className="mb-4" />
 
             {fileData.length > 0 && (
               <>
-                <h3 className="text-lg font-bold mb-4">Map Fields</h3>
+                <h3 className="text-lg font-bold mb-4">Lựa chọn trường</h3>
                 {Object.keys(fieldMapping).map((field) => (
                   <div key={field} className="mb-4">
                     <label className="block mb-2">{field}</label>
@@ -199,7 +199,7 @@ const EventDetail = () => {
                       onChange={handleMappingChange}
                       className="border rounded w-full p-2"
                     >
-                      <option value="">Select a field</option>
+                      <option value="">Lựa chọn trường</option>
                       {Object.keys(fileData[0]).map((fileField) => (
                         <option key={fileField} value={fileField}>
                           {fileField}

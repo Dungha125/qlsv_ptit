@@ -1,12 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-<<<<<<< HEAD
 
-=======
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
->>>>>>> 63baf8e460c45d8e0757fe1c133945c9d0c832c8
+
 
 module.exports = {
   entry: './src/index.js',

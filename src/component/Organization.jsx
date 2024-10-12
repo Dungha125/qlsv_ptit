@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import { List, Pagination, Spin } from 'antd';
 import Papa from 'papaparse'; 
 import * as XLSX from 'xlsx'; 
+import { useMediaQuery } from 'react-responsive';
 
 const Organization = () => {
   const [refresh, setRefresh] = useState(false);
@@ -25,6 +26,8 @@ const Organization = () => {
   const [totalEvents, setTotalEvents] = useState(0); 
   const [totalPages, setTotalPages] = useState(0);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
 
   const toggleUploadPopup = () => {
@@ -187,10 +190,10 @@ const Organization = () => {
     }
   };
   return (
-    <div className='w-full h-full flex'>
+    <div className='w-full h-screen flex'>
       <Sidebar setRefresh={setRefresh} />
 
-      <div className="flex-1 p-4 md:ml-64">
+      <div className="flex-1 p-4 h-screen md:ml-64">
         <h1 className='text-4xl font-bold m-8'>Các đơn vị trực thuộc</h1>
         {loading ? (
             <p>Loading...</p>
@@ -198,24 +201,40 @@ const Organization = () => {
               <p>Error: {error}</p>
             ) : (
         
-            <div className='h-full flex flex-col md:flex-row w-full '>
+            <div className='h-full flex flex-col md:flex-row w-full mb-4'>
          
-          <div className='mt-4 md:max-w-[30%] w-full px-4'>
+          <div className='mt-4 md:max-w-[30%] w-full px-4 h-auto'>
+            <div className='overflow-y-auto w-full max-h-screen'>
+            {isMobile ? (
+                  <select 
+                    className="border rounded w-full  p-2"
+                    onChange={(e) => toggleShowListUser(e.target.value)}
+                  >
+                    <option value="">Chọn đơn vị</option>
+                    {organization.map((org) => (
+                      <option key={org.id} value={org.id}>
+                        {org.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
             <List
               itemLayout="horizontal"
               dataSource={organization}
               renderItem={(organizations) => (
                 <List.Item onClick={() => toggleShowListUser(organizations.id)} className=' hover:bg-white rounded-md bg-slate-100 my-2'>
                   <List.Item.Meta
-                    className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
+                    className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full '
                     title={`${organizations.name}`}
                     description={organizations.description}
                   />
                 </List.Item>
               )}/>
+            )}
+              </div>
               <button
                 onClick={toggleUploadPopup}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  "
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 py-2 px-4 rounded  "
               >
                 Upload File
               </button>
@@ -235,13 +254,13 @@ const Organization = () => {
                   />
                 </List.Item>
               )}/>
-              <div className='w-full flex justify-center'>
+              <div className='w-full flex justify-center mb-4'>
                 <Pagination
                   current={currentPage}
                   total={totalEvents}
                   pageSize={10}
                   onChange={handlePageChange}
-                  className="mt-4 "
+                  className="my-4 "
                 />
           </div>
             </div>

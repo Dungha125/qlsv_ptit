@@ -218,46 +218,42 @@ const Sidebar = ({setRefresh}) => {
             </li>
             <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
             Tổ chức
-          </li></>
-          )}
-        </ul>
-
-        {/* Các button tạo sự kiện và tạo tài khoản chỉ hiển thị khi account group === 6 */}
-        {account.member_group === 6 && (
-          <>
-            <button
+          </li>
+          <button
               onClick={handleTogglePopup}
-              className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
             >
               Tạo sự kiện
             </button>
             <button
               onClick={handleCreatePopup}
-              className='bg-red-500 hover:bg-red-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
             >
               Tạo tổ chức
             </button>
             <button
               onClick={toggleUploadPopup}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 w-full rounded focus:outline-none focus:shadow-outline"
             >
-              Upload File
+              Tải danh sách
             </button>
           </>
-        )}
-        
+          )}
+        </ul>
 
-        <div className='w-[90%] h-[52px] rounded-lg bg-slate-100 bottom-4 fixed justify-center items-center'>
+        {/* Các button tạo sự kiện và tạo tài khoản chỉ hiển thị khi account group === 6 */}
+        
+        
           {loading ? (
             <p>Loading...</p>
           ) : error ? (
             <p>Error: {error}</p>
           ) : (
-            <div className='w-full h-full p-1 flex'>
-              <button onClick={fetchLogout} className='bg-red-500 w-full h-full rounded-md'>Đăng xuất</button>
+            <div className='w-full flex'>
+              <button onClick={fetchLogout} className='bg-red-500 hover:bg-red-700 w-full py-2 px-4 my-2 font-bold rounded-md'>Đăng xuất</button>
             </div>
           )}
-        </div>
+    
       </div>
 
       {/* Add Event Popup */}

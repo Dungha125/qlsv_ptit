@@ -13,21 +13,15 @@ const Account = () => {
   const [account, setAccount] = useState([]);
   const token = localStorage.getItem('authToken');
   const [showUploadPopup, setShowUploadPopup] = useState(false);
-  const [fileData, setFileData] = useState([]);
-  const [fieldMapping, setFieldMapping] = useState({
-    username_list: '',
-    role_list: '',
-  });
-  const [selectedUnitId, setSelectedUnitId] = useState("");
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const[oldPassword, setOldPassword] = useState('');
+  const[newPassword, setNewPassword] = useState('');
 
   const toggleUploadPopup = () => {
     setShowUploadPopup(!showUploadPopup);
   };
 
-  const handleUnitChange = (e) => {
-    setSelectedUnitId(e.target.value); 
-  };
+
 
 
 
@@ -61,51 +55,20 @@ const Account = () => {
     };
   }, [token]);
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    const fileExtension = file.name.split('.').pop();
 
-    if (fileExtension === 'csv') {
-      Papa.parse(file, {
-        header: true,
-        complete: (result) => setFileData(result.data),
-        error: (error) => console.error('Error parsing CSV:', error),
-      });
-    } else if (fileExtension === 'xlsx') {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        setFileData(jsonData);
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
 
-  // Handle field mapping changes
-  const handleMappingChange = (e) => {
-    const { name, value } = e.target;
-    setFieldMapping((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+
 
   // Submit mapped data to API
-  const handleSubmit = async () => {
-    const mappedUsers = fileData.map((row) => ({
-      username_list: row[fieldMapping.username_list],
-      role_list: row[fieldMapping.role_list]
-    }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/organizations/${selectedUnitId}/store_student`,
+        `${API_BASE_URL}/users/change_password`,
         { 
-          username_list: mappedUsers.map(user => user.username_list),
-          role_list: mappedUsers.map(user => user.role_list[0]) // Extract role list array properly
+          old: oldPassword,
+          password: newPassword,
         },
         {
           headers: {
@@ -115,7 +78,6 @@ const Account = () => {
           },
         }
       );
-      console.log('API Response:', response.data);
       setRefresh((prev) => !prev);
       toggleUploadPopup(); // Close the popup after success
     } catch (error) {
@@ -147,8 +109,33 @@ const Account = () => {
         </div>
         </>)
       }
-        </div>
-        </div>
+        <button onClick={toggleUploadPopup} className='px-2 py-2 bg-blue-500 hover:bg-blue-700 m-8 rounded-md text-white font-bold'>
+          Đổi mật khẩu
+        </button>
+        
+        {showUploadPopup && (
+          <form onSubmit={handleSubmit} className='w-[500px] mx-8 bg-slate-100 p-4 rounded-md'>
+            <div className='mb-4'>
+              <label>Mật khẩu cũ</label>
+              <input type="text"
+              value={oldPassword}
+              onChange={(e)=>setOldPassword(e.target.value)}
+              className='w-full p-2 border-slate-200'
+              placeholder='Nhập mật khẩu cũ' />
+            </div>
+            <div className='mb-4'>
+              <label>Mật khẩu mới</label>
+              <input type="text"
+              value={newPassword}
+              onChange={(e)=>setNewPassword(e.target.value)}
+              className='w-full p-2 border-slate-200'
+              placeholder='Nhập mật khẩu mới' />
+            </div>
+            <button type='submit'
+            className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>Xác nhận</button>
+          </form>
+        )}</div>
+    </div>
         
   )
 }

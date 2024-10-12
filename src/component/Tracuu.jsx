@@ -85,9 +85,9 @@ const TracuuForm = () => {
 
           <input
             type="submit"
-            value="Tìm kiếm"
+            value="Tra cứu"
             disabled={loading} 
-            className='hover:cursor-pointer p-1 bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg'
+            className='hover:cursor-pointer py-1 px-2  bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg'
           />
         </div>
       </form>
@@ -100,7 +100,7 @@ const TracuuForm = () => {
           <>
           {events.length > 0 && (
             
-            <div className='w-[80%] flex flex-col bg-white rounded-lg p-4 mb-4 overflow-y-auto'>
+            <div className='w-[90%] flex flex-col bg-white rounded-lg p-2 mb-4 overflow-y-auto'>
           <div className='w-full h-[80%]'>
             <p className='mb-4'>Tổng số hoạt động đã tham gia: <strong>{events.length}</strong></p>
             <List

@@ -66,7 +66,7 @@ const Login = () => {
               name="username" 
               id="username" 
               className='w-full rounded-md p-2 border border-gray-300' 
-              placeholder='Nhập username' 
+              placeholder='Nhập mã sinh viên' 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required 
