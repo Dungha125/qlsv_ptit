@@ -18,12 +18,14 @@ const ListEvent = ({setUser}) => {
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   
-
+  const apiUrl = `${UserId}` == 1 
+      ? `${API_BASE_URL}/events`
+      :`${API_BASE_URL}/users/${UserId}/event` ;
   //số trang
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE_URL}/users/${UserId}/event`, {
+      const response = await axios.get(apiUrl, {
         headers: { 
           Authorization: `Bearer ${token}`,
           Accept: 'application/json' 

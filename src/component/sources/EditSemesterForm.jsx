@@ -17,10 +17,10 @@ const EditSemesForm = ({ semester, onClose }) => {
   const formattedFinish = formatDateTime(semester.finish_at);
 
   const [formData, setFormData] = useState({
-    name: sanitizeAlphaSpaces(semester.name),
+    name: semester.name,
     start_at: formattedStart,
     finish_at: formattedFinish,
-    about: sanitizeAlphaSpaces(semester.about),
+    about: semester.about,
     code: semester.code,
     short_name: semester.short_name,
     status: semester.status,

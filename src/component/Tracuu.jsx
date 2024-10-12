@@ -55,8 +55,8 @@ const TracuuForm = () => {
 
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
-          <div className='w-full bottom-0 right-0 absolute text-center text-xs mb-1'>
-      <span>Copyright@2024 Ver:2024.10.11 Đoàn thanh niên Học viện</span>
+          <div className='w-full bottom-0 absolute text-center text-xs my-1'>
+      <span>Copyright@2024 Ver:2024.10.12 Đoàn thanh niên Học viện</span>
       <br></br>
       <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
     </div>
@@ -65,27 +65,24 @@ const TracuuForm = () => {
         <img src={logodoan} width={90} height={90} alt="logo doan" className='mb-[2rem] object-contain' />
       </span>
       
-      <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 md:p-12'>
+      <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4'>
         <h1 className='text-2xl w-full text-center font-bold text-neutral-800 mb-4'>Tra cứu hoạt động</h1>
         {errorMess && <p className='text-red-600 text-center mb-4'>{errorMess}</p>}
         
-        <form onSubmit={handleSubmit} className='flex justify-center items-center gap-4'>
+        <form onSubmit={handleSubmit} className='flex justify-center items-center w-[70%]'>
         {errorMess && <p className="error-message">{errorMess}</p>} 
-        <div> 
-          <label htmlFor="name" className='mx-2 font-bold'>Username:</label>
+        <div className='flex items-center flex-col w-full'> 
           <input
             type="text"
             id="name"
-            placeholder="Enter your username"
+            placeholder="Nhập mã sinh viên"
             name="name"
             value={name}
             onChange={e => setName(e.target.value)}
-            className='p-2'
+            className='p-2 w-full mb-2'
             required
           />
-        </div>
 
-        <div>
           <input
             type="submit"
             value="Tìm kiếm"
@@ -103,7 +100,7 @@ const TracuuForm = () => {
           <>
           {events.length > 0 && (
             
-            <div className='w-[80%] flex flex-col bg-white rounded-lg p-4'>
+            <div className='w-[80%] flex flex-col bg-white rounded-lg p-4 mb-4 overflow-y-auto'>
           <div className='w-full h-[80%]'>
             <p className='mb-4'>Tổng số hoạt động đã tham gia: <strong>{events.length}</strong></p>
             <List
@@ -111,6 +108,7 @@ const TracuuForm = () => {
             dataSource={events}
             renderItem={(event) => (
               <List.Item  className=' hover:bg-slate-100 flex '>
+                
                 <List.Item.Meta 
                  className='px-4'
                   title={event.name}
@@ -142,7 +140,7 @@ const TracuuForm = () => {
 
       
 
-      <img src={backlogin} alt="backlogin" className='absolute object-cover w-screen h-screen opacity-30 -z-[10]' />
+      <img src={backlogin} alt="backlogin" className='absolute object-fill w-full h-full opacity-30 -z-[10]' />
     </div>
   );
 };

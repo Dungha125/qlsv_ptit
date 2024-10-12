@@ -11,6 +11,7 @@ const AddEvent = ({ onAddEvent }) => {
     const [eventDescription, setEventDescription] = useState('');
     const [message, setMessage] = useState('');
     const [semesters, setSemesters] = useState([]);
+      
 
     const token = localStorage.getItem('authToken');
 
@@ -65,10 +66,10 @@ const AddEvent = ({ onAddEvent }) => {
             const response = await axios.post(
                 `${API_BASE_URL}/events`,
                 {
-                    name: sanitizeAlphaSpaces(eventName),
-                    organization: sanitizeAlphaSpaces(eventOrganization),
-                    description: sanitizeAlphaSpaces(eventDescription),
-                    address: sanitizeAlphaSpaces(eventAddress),
+                    name: eventName,
+                    organization: eventOrganization,
+                    description: eventDescription,
+                    address: eventAddress,
                     semester_id: semesterId,
                     start_at: formattedStart,
                     finish_at: formattedFinish,

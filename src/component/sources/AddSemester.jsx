@@ -35,9 +35,9 @@ const AddSemester = () => {
         try {
             await axios.post(`${API_BASE_URL}/semesters`, 
                 {
-                    name: sanitizeAlphaSpaces(semesterName),
+                    name: semesterName,
                     code: semesterCode,
-                    about: sanitizeAlphaSpaces(semesterAbout),
+                    about: semesterAbout,
                     short_name: semesterShortName,
                     status: semesterStatus,
                     start_at: formattedStart,

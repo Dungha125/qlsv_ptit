@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const sanitizeAlphaSpaces = (text) => {
-  // Keep letters, numbers, spaces, and common special characters
-  return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚỤĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
+  // Giữ lại tất cả các ký tự chữ cái, số, khoảng trắng và một số ký tự đặc biệt
+  return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, '');
 };
+
 
 const EditEventForm = ({ event, onClose }) => {
   const [formData, setFormData] = useState({
-    name: sanitizeAlphaSpaces(event.name),
+    name: event.name,
     start_at: event.start_at,
     finish_at: event.finish_at,
-    organization: sanitizeAlphaSpaces(event.organization),
-    description: sanitizeAlphaSpaces(event.description),
-    address: sanitizeAlphaSpaces(event.address),
+    organization: event.organization,
+    description: event.description,
+    address: event.address,
     semester_id: event.semester_id,
   });
   const [loading, setLoading] = useState(false);
@@ -43,10 +44,11 @@ const EditEventForm = ({ event, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const sanitizedValue = name === 'name' || name === 'organization' || name === 'description' || name === 'address'
-      ? sanitizeAlphaSpaces(value)
-      : value; // Sanitize only specific fields
-    setFormData({ ...formData, [name]: sanitizedValue });
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const formatDateTime = (dateTime) => {
