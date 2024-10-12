@@ -114,7 +114,7 @@ const Account = () => {
         </button>
         
         {showUploadPopup && (
-          <form onSubmit={handleSubmit} className='w-[500px] mx-8 bg-slate-100 p-4 rounded-md'>
+          <form onSubmit={handleSubmit} className='max-w-[500px] mx-8 bg-slate-100 p-4 rounded-md'>
             <div className='mb-4'>
               <label>Mật khẩu cũ</label>
               <input type="text"
