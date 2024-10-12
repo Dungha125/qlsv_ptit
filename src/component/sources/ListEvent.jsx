@@ -14,6 +14,7 @@ const ListEvent = ({setUser}) => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const token = localStorage.getItem('authToken');
+  const UserId = localStorage.getItem('AuthId');
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   
@@ -22,7 +23,7 @@ const ListEvent = ({setUser}) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE_URL}/events`, {
+      const response = await axios.get(`${API_BASE_URL}/users/${UserId}/event`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           Accept: 'application/json' 

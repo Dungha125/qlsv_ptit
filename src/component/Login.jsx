@@ -29,7 +29,9 @@ const Login = () => {
 
       if (response.data){
         const token = response.data.access_token;
+        const AuthId = response.data.user.id;
         localStorage.setItem('authToken', token);  // Lưu token
+        localStorage.setItem('authID', AuthId);
         navigate('/home');
       } else {
         setErrorMess('Invalid credentials');
