@@ -21,6 +21,7 @@ const EventDetail = () => {
     first_name: '',
   });
   const token = localStorage.getItem('authToken');
+  const UserId = localStorage.getItem('authID');
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -159,7 +160,7 @@ const EventDetail = () => {
         </button>
       </div>
 
-      <div className="w-full mb-4 mt-8">
+      <div className="w-full mb-4 mt-12">
         <h1 className="text-2xl font-bold">{event.name}</h1>
         <p>{event.description}</p>
         <p>Địa điểm tổ chức: {event.address}</p>
@@ -167,7 +168,7 @@ const EventDetail = () => {
         <p>End: {event.finish_at}</p>
       </div>
 
-      <button onClick={togglePopup} className="p-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-700">
+      <button onClick={togglePopup} className={`p-3 rounded-lg ${UserId == 1 ? '':'hidden'} font-bold text-white bg-red-500 hover:bg-red-700`}>
         Thêm nhân sự
       </button>
 

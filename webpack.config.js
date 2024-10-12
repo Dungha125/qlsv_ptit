@@ -31,6 +31,12 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html', 
+      filename: 'index.html', 
+    }),
+  ],
   resolve: {
     extensions: ['.js', '.jsx'],
   },

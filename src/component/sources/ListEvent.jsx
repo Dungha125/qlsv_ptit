@@ -14,7 +14,7 @@ const ListEvent = ({setUser}) => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const token = localStorage.getItem('authToken');
-  const UserId = localStorage.getItem('AuthId');
+  const UserId = localStorage.getItem('authID');
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   
@@ -139,10 +139,9 @@ const handleDeleteEvent = async (eventId) => {
                   title={event.name}
                   description={`Start: ${event.start_at} - End: ${event.finish_at}`}
                 />  
-                <span className='mx-4 flex gap-2'>
+                <span className={`mx-4 gap-2 ${UserId == '1' ? 'flex' : 'hidden'}`}>
                   <button onClick={() => handleEditEvent(event)} className='p-2 bg-green-500 text-white rounded-md z-60'>Sửa</button>
                   <button onClick={() => handleDeleteEvent(event.id)} className='p-2 bg-red-500 text-white rounded-md z-60'>Xoá</button>
-                 
                 </span>
               </List.Item>
              
