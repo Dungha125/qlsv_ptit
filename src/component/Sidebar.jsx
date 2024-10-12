@@ -28,6 +28,7 @@ const Sidebar = ({setRefresh}) => {
     password: '',
     member_group: ''
   });
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleClickAccount = () => {
     navigate('/account');
@@ -69,7 +70,7 @@ const Sidebar = ({setRefresh}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/auth/profile', {
+        const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
           headers: { 
             Authorization: `Bearer ${token}`,
             Accept: 'application/json' 
@@ -98,7 +99,7 @@ const Sidebar = ({setRefresh}) => {
 
   const fetchLogout = async () => {
     try {
-      await axios.post('https://qldv-api.toiyeuptit.com/api/auth/logout', {}, {
+      await axios.post(`${API_BASE_URL}/auth/logout`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',
@@ -160,7 +161,7 @@ const Sidebar = ({setRefresh}) => {
 
     try {
       const response = await axios.post(
-        'https://qldv-api.toiyeuptit.com/api/users/import',
+        `${API_BASE_URL}/users/import`,
         {
           force_update_password: true,
           users: mappedUsers,

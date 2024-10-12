@@ -22,11 +22,12 @@ const EventDetail = () => {
   });
   const token = localStorage.getItem('authToken');
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
-        const response = await axios.get(`https://qldv-api.toiyeuptit.com/api/events/${eventId}`, {
+        const response = await axios.get(`${API_BASE_URL}/events/${eventId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
@@ -47,7 +48,7 @@ const EventDetail = () => {
 
   const fetchParticipants = async () => {
     try {
-      const response = await axios.get(`https://qldv-api.toiyeuptit.com/api/events/${eventId}/user`, {
+      const response = await axios.get(`${API_BASE_URL}/events/${eventId}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',
@@ -105,7 +106,7 @@ const EventDetail = () => {
   
     try {
       const response = await axios.post(
-        `https://qldv-api.toiyeuptit.com/api/events/import`,
+        `${API_BASE_URL}/events/import`,
         { 
           event_id: Number(eventId), 
           users: mappedUsers,

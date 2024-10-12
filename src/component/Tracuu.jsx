@@ -11,6 +11,7 @@ const TracuuForm = () => {
   const [error, setError] = useState(null); 
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([]); // Lưu các sự kiện người dùng đã tham gia
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +28,7 @@ const TracuuForm = () => {
     try {
       const recaptchaToken = await executeRecaptcha('submit');
 
-      const response = await axios.post('https://qldv-api.toiyeuptit.com/api/retrieve', {
+      const response = await axios.post(`${API_BASE_URL}/retrieve`, {
         username: name,
         s: null, // Optional search query, can be modified based on user input
         with_trashed: true,

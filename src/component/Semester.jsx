@@ -18,6 +18,7 @@ const Semester = () => {
   const [refresh, setRefresh] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedSemes, setSelectedSemes] = useState(null);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleClickSemesDetail = (semesterId) => {
     navigate(`/semester/${semesterId}`);
@@ -56,7 +57,7 @@ const Semester = () => {
 
   const fetchSemes = useCallback(async () => {
     try {
-      const response = await axios.get('https://qldv-api.toiyeuptit.com/api/semesters', {
+      const response = await axios.get(`${API_BASE_URL}/semesters`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',

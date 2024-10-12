@@ -10,6 +10,7 @@ const SemesterDetail = () => {
     const [error, setError] = useState(null);
     const token = localStorage.getItem('authToken'); // Get auth token from localStorage
     const navigate = useNavigate();
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     useEffect(() => {
         if (!token) {
@@ -21,7 +22,7 @@ const SemesterDetail = () => {
 
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('https://qldv-api.toiyeuptit.com/api/events', {
+                const response = await axios.get(`${API_BASE_URL}/events`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',

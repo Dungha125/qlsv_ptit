@@ -24,6 +24,7 @@ const Organization = () => {
   const [currentPage, setCurrentPage] = useState(1); 
   const [totalEvents, setTotalEvents] = useState(0); 
   const [totalPages, setTotalPages] = useState(0);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 
   const toggleUploadPopup = () => {
@@ -41,7 +42,7 @@ const Organization = () => {
   useEffect(()=>{
     const fecthOrgani = async () => {
       try{
-        const response = await axios.get('https://qldv-api.toiyeuptit.com/api/organizations',
+        const response = await axios.get(`${API_BASE_URL}/organizations`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -80,7 +81,7 @@ const Organization = () => {
   const fetchList = async (organizationId) => {
     setLoading(true); // Set loading state while fetching data
     try {
-      const response = await axios.get(`https://qldv-api.toiyeuptit.com/api/organizations/${organizationId}/user_list`, {
+      const response = await axios.get(`${API_BASE_URL}/organizations/${organizationId}/user_list`, {
         params: {
           page: currentPage,
           per_page: 10 
@@ -165,7 +166,7 @@ const Organization = () => {
 
     try {
       const response = await axios.post(
-        `https://qldv-api.toiyeuptit.com/api/organizations/${selectedUnitId}/store_student`,
+        `${API_BASE_URL}/organizations/${selectedUnitId}/store_student`,
         { 
           username_list: mappedUsers.map(user => user.username_list),
           role_list: mappedUsers.map(user => user.role_list[0]) // Extract role list array properly

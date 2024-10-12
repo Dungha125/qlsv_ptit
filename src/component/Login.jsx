@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [errorMess, setErrorMess] = useState(''); // Hiển thị lỗi
   const navigate = useNavigate();
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ const Login = () => {
   const fetchApiLogin = async () => {
     try {
       const response = await axios.post(
-        'https://qldv-api.toiyeuptit.com/api/auth/login',
+        `${API_BASE_URL}/auth/login`,
         { username, password }
       );
 

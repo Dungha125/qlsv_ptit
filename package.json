@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && node obfuscate.js",
+    "build": "webpack",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -50,7 +50,13 @@
     "@babel/core": "^7.25.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.25.7",
+    "autoprefixer": "^10.4.20",
+    "css-loader": "^7.1.2",
     "javascript-obfuscator": "^4.1.1",
-    "tailwindcss": "^3.4.10"
+    "postcss-loader": "^8.1.1",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^3.4.13",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
   }
 }
