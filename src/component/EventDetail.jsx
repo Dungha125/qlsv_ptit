@@ -146,7 +146,7 @@ const EventDetail = () => {
   };
 
   const handleBackClick = () => {
-    navigate(`/home`);
+    navigate(`/quanly/home`);
   };
 
   if (loading) return <p>Loading...</p>;

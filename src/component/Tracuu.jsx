@@ -56,7 +56,7 @@ const TracuuForm = () => {
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
           <div className='w-full bottom-0 absolute text-center text-xs my-1'>
-      <span>Copyright@2024 Ver:2024.10.12 Đoàn thanh niên Học viện</span>
+      <span>Copyright@2024 Ver:2024.10.13 Đoàn thanh niên Học viện</span>
       <br></br>
       <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
     </div>

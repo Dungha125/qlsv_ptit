@@ -31,19 +31,19 @@ const Sidebar = ({setRefresh}) => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleClickAccount = () => {
-    navigate('/account');
+    navigate('/quanly/account');
   };
 
   const handleClickSemester = () => {
-    navigate('/semester');
+    navigate('/quanly/semester');
   };
 
   const handleClickHome = () => {
-    navigate('/home');
+    navigate('/quanly/home');
   };
 
   const handleClickOrganization = () => {
-    navigate('/organization');
+    navigate('/quanly/organization');
   };
 
   const toggleSidebar = () => {
@@ -106,7 +106,7 @@ const Sidebar = ({setRefresh}) => {
         },
       });
       localStorage.removeItem('authToken'); 
-      navigate('/', { replace: true });
+      navigate('/quanly', { replace: true });
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
       setError(error.message);
@@ -203,20 +203,20 @@ const Sidebar = ({setRefresh}) => {
         <h2 className="text-xl font-bold mb-6 ml-[3rem] md:ml-0">Menu</h2>
         <ul>
           {/* Hiển thị tài khoản và home cho tất cả mọi người */}
-          <li onClick={handleClickAccount} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/account' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
+          <li onClick={handleClickAccount} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/account' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
             Tài khoản
           </li>
-          <li onClick={handleClickHome} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/home' ? 'bg-white text-neutral-900' : 'bg-none hover:bg-gray-700'}`}>
+          <li onClick={handleClickHome} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/home' ? 'bg-white text-neutral-900' : 'bg-none hover:bg-gray-700'}`}>
             {account.member_group === 6 ? 'Sự kiện' : 'Sự kiện đã tham gia'}
           </li>
 
           {/* Nếu account group === 6 thì hiển thị thêm menu học kỳ */}
           {account.member_group === 6 && (
             <>
-            <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/semester' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
+            <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/semester' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
               Học kỳ
             </li>
-            <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
+            <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
             Tổ chức
           </li>
           <button

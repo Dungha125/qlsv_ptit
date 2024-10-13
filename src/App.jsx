@@ -15,14 +15,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/events/:eventId" element={<EventDetail />} />
-        <Route path="/account" element={<Account/>}/>
-        <Route path="/semester" element={<Semester/>} />
-        <Route path="/semester/:semesterId" element={<SemesterDetail />} />
-        <Route path="/organization" element={<Organization />} />
-        <Route path="/tracuu" element={<Tracuu />} />
+        <Route path="/quanly" element={<Login />} />
+        <Route path="/quanly/home" element={<Home />} />
+        <Route path="/quanly/events/:eventId" element={<EventDetail />} />
+        <Route path="/quanly/account" element={<Account/>}/>
+        <Route path="/quanly/semester" element={<Semester/>} />
+        <Route path="/quanly/semester/:semesterId" element={<SemesterDetail />} />
+        <Route path="/quanly/organization" element={<Organization />} />
+        <Route path="/" element={<Tracuu />} />
       </Routes>
     </Router>
   );

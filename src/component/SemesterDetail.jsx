@@ -53,7 +53,7 @@ const SemesterDetail = () => {
 
 
     const handleEventClick = () => {
-        navigate(`/semester`);
+        navigate(`/quanly/semester`);
       }
     return (
         <div className="w-full h-full p-4">
