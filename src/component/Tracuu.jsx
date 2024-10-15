@@ -43,10 +43,19 @@ const TracuuForm = () => {
         }
       });
 
-      setEvents(response.data.data); 
+      if (!response.data.data) {
+        setErrorMess('Sai mã sinh viên'); 
+      } else {
+        const eventsList = response.data.data;
+        if (eventsList.length === 0) {
+          setErrorMess('Sinh viên chưa tham gia sự kiện nào');
+        } else {
+          setEvents(eventsList); 
+        }
+      }
       
     } catch (err) {
-      setErrorMess('An error occurred while fetching data. Please try again.');
+      setErrorMess('Đã xảy ra lỗi khi lấy dữ liệu. Vui lòng thử lại');
       console.error('API Error:', err);
     } finally {
       setLoading(false); 
@@ -66,11 +75,8 @@ const TracuuForm = () => {
       </span>
       
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4'>
-        <h1 className='text-2xl w-full text-center font-bold text-neutral-800 mb-4'>Tra cứu hoạt động</h1>
-        {errorMess && <p className='text-red-600 text-center mb-4'>{errorMess}</p>}
-        
+        <h1 className='text-2xl w-full text-center font-bold text-neutral-800 mb-4'>Tra cứu hoạt động Đoàn</h1>
         <form onSubmit={handleSubmit} className='flex justify-center items-center w-[70%]'>
-        {errorMess && <p className="error-message">{errorMess}</p>} 
         <div className='flex items-center flex-col w-full'> 
           <input
             type="text"
@@ -98,6 +104,11 @@ const TracuuForm = () => {
           <p>Error: {error}</p> 
         ) : (
           <>
+          {events.length === 0 && errorMess && (
+            <div className='bg-white px-4 py-2 rounded-md shadow-lg'>
+          <p className="text-red-600 text-center">{errorMess}</p> 
+          </div> 
+          )}
           {events.length > 0 && (
             
             <div className='w-[90%] flex flex-col bg-white rounded-lg p-2 mb-4 overflow-y-auto'>
