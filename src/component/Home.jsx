@@ -5,6 +5,7 @@ import TopUser from './sources/TopUser.jsx';
 
 const Home = () => {
   const [refresh, setRefresh] = useState(false);
+  const userId = localStorage.getItem('authID');
   
 
   return (
@@ -12,9 +13,16 @@ const Home = () => {
       <Sidebar setRefresh={setRefresh} /> {/* Pass setRefresh as a prop */}
       
       <div className="flex-1 p-4 md:ml-64">
-        <ListEvent key={refresh} /> {/* Refresh when refresh state changes */}
+        <div className='flex flex-col md:flex-row'>
+          <ListEvent key={refresh} /> {/* Refresh when refresh state changes */}
+          {userId == 1 && (
+          <TopUser className='relative hidden md:block'/>
+          )}
+        </div>
         
-      </div><TopUser className='relative'/>
+      </div>
+      
+      
     </div>
   );
 };

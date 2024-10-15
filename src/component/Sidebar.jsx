@@ -106,6 +106,7 @@ const Sidebar = ({setRefresh}) => {
         },
       });
       localStorage.removeItem('authToken'); 
+      localStorage.removeItem('authID');
       navigate('/quanly', { replace: true });
     } catch (error) {
       console.error('Error logging out:', error.response ? error.response.data : error.message);
