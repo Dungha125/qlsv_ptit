@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/quanly" element={<Login />} />
         <Route path="/quanly/home" element={<Home />} />
-        <Route path="/quanly/events/:eventId" element={<EventDetail />} />
+        <Route path="/quanly/home/events/:eventId" element={<EventDetail />} />
         <Route path="/quanly/account" element={<Account/>}/>
         <Route path="/quanly/semester" element={<Semester/>} />
         <Route path="/quanly/semester/:semesterId" element={<SemesterDetail />} />

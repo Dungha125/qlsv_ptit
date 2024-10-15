@@ -63,7 +63,7 @@ const ListEvent = ({setUser}) => {
   }, [token, currentPage]);
 
   const handleEventClick = (eventId) => {
-    navigate(`/events/${eventId}`);
+    navigate(`events/${eventId}`);
   }
 
   const handlePageChange = (page) => {
@@ -120,7 +120,7 @@ const handleDeleteEvent = async (eventId) => {
   };
 
   return (
-    <div className="w-full h-screen flex">
+    <div className="w-full flex border-r-2">
       
       <div className="flex-1 p-8">
         <h1 className='w-full text-2xl font-bold mb-4'>Sự kiện</h1>

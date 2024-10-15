@@ -45,13 +45,13 @@ const Login = () => {
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
           <div className='w-full bottom-0 right-0 absolute text-center text-xs mb-2'>
-      <span>Copyright@2024 Ver:2024.10.13 Đoàn thanh niên Học viện</span>
+      <span>Copyright@2024 Ver:2024.10.16 Đoàn thanh niên Học viện</span>
       <br></br>
       <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
     </div>
       <span className='flex flex-row gap-5'>
-        <img src={logologin} width={75} height={75} alt="logo ptit" className='mb-[2rem] object-contain' />
-        <img src={logodoan} width={90} height={90} alt="logo doan" className='mb-[2rem] object-contain' />
+        <img src={logologin} width={50} height={50} alt="logo ptit" className='mb-[2rem] object-contain' />
+        <img src={logodoan} width={60} height={60} alt="logo doan" className='mb-[2rem] object-contain' />
       </span>
       
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4 md:p-12'>

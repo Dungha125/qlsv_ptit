@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ListEvent from './sources/ListEvent.jsx';
 import Sidebar from './Sidebar.jsx';
+import TopUser from './sources/TopUser.jsx';
 
 const Home = () => {
   const [refresh, setRefresh] = useState(false);
@@ -12,7 +13,8 @@ const Home = () => {
       
       <div className="flex-1 p-4 md:ml-64">
         <ListEvent key={refresh} /> {/* Refresh when refresh state changes */}
-      </div>
+        
+      </div><TopUser className='relative'/>
     </div>
   );
 };
