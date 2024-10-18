@@ -27,6 +27,7 @@ const Organization = () => {
   const [totalPages, setTotalPages] = useState(0);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
 
@@ -308,14 +309,11 @@ const Organization = () => {
                 className='border rounded w-full p-2'
               >
                 <option value="">Chọn đơn vị</option>
-                  <option value="2">LCĐ Công nghệ thông tin 1</option>
-                  <option value="3">LCĐ Kỹ thuật Điện tử 1</option>
-                  <option value="4">LCĐ Viễn thông 1</option>
-                  <option value="6">LCĐ Quản trị kinh doanh 1</option>
-                  <option value="7">LCĐ Tài chính kế toán 1</option>
-                  <option value="5">LCĐ Viện kinh tế Bưu điện</option>
-                  <option value="8">LCĐ Viện KHKTBD</option>
-
+                {organization.map((org) => (
+                  <option key={org.id} value={org.id}>
+                    {org.name}
+                  </option>
+                ))}
 
               </select>
           {Object.keys(fieldMapping).map((field) => (
