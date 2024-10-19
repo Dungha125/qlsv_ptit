@@ -92,9 +92,7 @@ const Sidebar = ({setRefresh}) => {
       setError("No token found");
       setLoading(false);
     } 
-    return () => {
-     
-    };
+    return () => {};
   }, [token]);
 
   const fetchLogout = async () => {
@@ -113,7 +111,6 @@ const Sidebar = ({setRefresh}) => {
       setError(error.message);
     }
   };
-
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -138,7 +135,6 @@ const Sidebar = ({setRefresh}) => {
     }
   };
 
-  // Handle field mapping changes
   const handleMappingChange = (e) => {
     const { name, value } = e.target;
     setFieldMapping((prev) => ({
@@ -147,7 +143,6 @@ const Sidebar = ({setRefresh}) => {
     }));
   };
 
-  // Submit mapped data to API
   const handleSubmit = async () => {
     const mappedUsers = fileData.map((row) => ({
       last_name: row[fieldMapping.last_name],
@@ -183,8 +178,6 @@ const Sidebar = ({setRefresh}) => {
     }
   };
 
-  
-
   return (
     <>
       <button
@@ -217,154 +210,88 @@ const Sidebar = ({setRefresh}) => {
             <li onClick={handleClickSemester} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/semester' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
               Học kỳ
             </li>
-            <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
-            Tổ chức
-          </li>
-          <button
-              onClick={handleTogglePopup}
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
-            >
-              Tạo sự kiện
-            </button>
-            <button
-              onClick={handleCreatePopup}
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
-            >
-              Tạo tổ chức
-            </button>
-            <button
-              onClick={toggleUploadPopup}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-2 px-4 w-full rounded focus:outline-none focus:shadow-outline"
-            >
-              Tải danh sách
-            </button>
-          </>
-          )}
-        </ul>
-
-        {/* Các button tạo sự kiện và tạo tài khoản chỉ hiển thị khi account group === 6 */}
-        
-        
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>Error: {error}</p>
-          ) : (
-            <div className='w-full flex'>
-              <button onClick={fetchLogout} className='bg-red-500 hover:bg-red-700 w-full py-2 px-4 my-2 font-bold rounded-md'>Đăng xuất</button>
-            </div>
-          )}
-    
-      </div>
-
-      {/* Add Event Popup */}
-      {showAddEvent && (
-          <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-          <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
-            <h1 className='text-2xl font-bold mb-4 text-center'>Tạo sự kiện mới</h1>
-            
-            <button
-              onClick={handleTogglePopup}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-         
-            <div className='overflow-auto max-h-[80vh]'>
-              <AddEvent onAddEvent={handleAddEvent} />
-            </div>
-          </div>
-        </div>
-        )}
-
-      {/* Create Account Popup */}
-      {showCreateAccount && (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-      <div className='bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative py-[2rem]'>
-        <h1 className='text-2xl font-bold mb-4 text-center'>Tạo tài khoản mới</h1>
-        
-        <button
-          onClick={handleCreatePopup} // Chỉnh sửa để gọi hàm đúng
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-     
-        <div className='overflow-auto max-h-[80vh]'>
-          <CreateAccountForm onCreateAccount={handleCreateEvent} />
-        </div>
-      </div>
-    </div>
-)}
-
-      {/*Upload */}
-      {showUploadPopup && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-      <h2 className="text-xl font-bold mb-4">Upload File</h2>
-      <input
-        type="file"
-        accept=".csv,.xlsx"
-        onChange={handleFileUpload}
-        className="mb-4"
-      />
-
-      {/* Field Mapping */}
-      {fileData.length > 0 && (
-        <>
-          <h3 className="text-lg font-bold mb-4">Map Fields</h3>
-          {Object.keys(fieldMapping).map((field) => (
-            <div key={field} className="mb-4">
-              <label className="block mb-2">{field}</label>
-              <select
-                name={field}
-                value={fieldMapping[field]}
-                onChange={handleMappingChange}
-                className="border rounded w-full p-2"
-              >
-                <option value="">Select a field</option>
-                {Object.keys(fileData[0]).map((fileField) => (
-                  <option key={fileField} value={fileField}>
-                    {fileField}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-          <button
-            onClick={handleSubmit}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Submit
-          </button>
             </>
           )}
 
+          {/* Hiển thị "Tổ chức" nếu role id === 1 */}
+          {account.organizations && account.organizations.some(org => org.pivot.role === 1) && (
+            <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
+              Tổ chức
+            </li>
+          )}
+
+          {/* Tạo sự kiện và tổ chức chỉ hiển thị khi account group === 6 */}
+          {account.member_group === 6 && (
+            <>
+              <button
+                onClick={handleTogglePopup}
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              >
+                Tạo sự kiện
+              </button>
+              <button
+                onClick={handleCreatePopup}
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              >
+                Tạo tổ chức
+              </button>
+              <button
+                onClick={toggleUploadPopup}
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold w-full py-2 my-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              >
+                Tải file tài khoản
+              </button>
+            </>
+          )}
+        </ul>
+        <div className="absolute bottom-0 left-0 w-full mb-4 px-4">
           <button
-            onClick={toggleUploadPopup}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            onClick={fetchLogout}
+            className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+
+      {showAddEvent && <AddEvent closePopup={handleAddEvent} />}
+      {showCreateAccount && <CreateAccountForm closePopup={handleCreateEvent} />}
+      {showUploadPopup && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+          <div className='bg-white rounded-lg p-6'>
+            <h2 className='text-lg font-bold mb-4'>Tải file tài khoản</h2>
+            <input type='file' accept='.csv,.xlsx' onChange={handleFileUpload} />
+            <div className='mt-4'>
+              {Object.keys(fieldMapping).map((field) => (
+                <div key={field} className='mb-2'>
+                  <label className='block mb-1'>{field}:</label>
+                  <input
+                    type='text'
+                    name={field}
+                    value={fieldMapping[field]}
+                    onChange={handleMappingChange}
+                    className='border rounded w-full p-2'
+                  />
                 </div>
-              </div>
-            )}
-
-            {/*UploadList*/}
-          
-
+              ))}
+            </div>
+            <div className='mt-6'>
+              <button
+                onClick={handleSubmit}
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4'
+              >
+                Submit
+              </button>
+              <button
+                onClick={toggleUploadPopup}
+                className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              >
+                Hủy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
