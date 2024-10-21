@@ -214,7 +214,7 @@ const Sidebar = ({setRefresh}) => {
           )}
 
           {/* Hiển thị "Tổ chức" nếu role id === 1 */}
-          {account.organizations && account.organizations.some(org => org.pivot.role === 1) && (
+          {account.organizations && (account.organizations.some(org => org.pivot.role === 1) || account.member_group === 6) && (
             <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
               Tổ chức
             </li>
@@ -254,44 +254,76 @@ const Sidebar = ({setRefresh}) => {
         </div>
       </div>
 
-      {showAddEvent && <AddEvent closePopup={handleAddEvent} />}
-      {showCreateAccount && <CreateAccountForm closePopup={handleCreateEvent} />}
-      {showUploadPopup && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-          <div className='bg-white rounded-lg p-6'>
-            <h2 className='text-lg font-bold mb-4'>Tải file tài khoản</h2>
-            <input type='file' accept='.csv,.xlsx' onChange={handleFileUpload} />
-            <div className='mt-4'>
-              {Object.keys(fieldMapping).map((field) => (
-                <div key={field} className='mb-2'>
-                  <label className='block mb-1'>{field}:</label>
-                  <input
-                    type='text'
-                    name={field}
-                    value={fieldMapping[field]}
-                    onChange={handleMappingChange}
-                    className='border rounded w-full p-2'
-                  />
-                </div>
-              ))}
-            </div>
-            <div className='mt-6'>
-              <button
-                onClick={handleSubmit}
-                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4'
-              >
-                Submit
-              </button>
-              <button
-                onClick={toggleUploadPopup}
-                className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-              >
-                Hủy
-              </button>
-            </div>
+      {showAddEvent && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="relative bg-white rounded-lg p-6 w-full max-w-lg">
+      <button
+        onClick={handleAddEvent}
+        className="absolute top-2 right-2 text-gray-700 font-bold"
+      >
+        X
+      </button>
+      <AddEvent closePopup={handleAddEvent} />
+    </div>
+  </div>
+)}
+
+{showCreateAccount && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="relative bg-white rounded-lg p-6 w-full max-w-lg">
+      <button
+        onClick={handleCreateEvent}
+        className="absolute top-2 right-2 text-gray-700 font-bold"
+      >
+        X
+      </button>
+      <CreateAccountForm closePopup={handleCreateEvent} />
+    </div>
+  </div>
+)}
+
+{showUploadPopup && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="relative bg-white rounded-lg p-6 w-full max-w-lg h-[70%] overflow-y-auto">
+      <button
+        onClick={toggleUploadPopup}
+        className="absolute top-2 right-2 text-gray-700 font-bold"
+      >
+        X
+      </button>
+      <h2 className="text-lg font-bold mb-4">Tải file tài khoản</h2>
+      <input type="file" accept=".csv,.xlsx" onChange={handleFileUpload} />
+      <div className="mt-4">
+        {Object.keys(fieldMapping).map((field) => (
+          <div key={field} className="mb-2">
+            <label className="block mb-1">{field}:</label>
+            <input
+              type="text"
+              name={field}
+              value={fieldMapping[field]}
+              onChange={handleMappingChange}
+              className="border rounded w-full p-2"
+            />
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+      <div className="mt-6">
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4"
+        >
+          Submit
+        </button>
+        <button
+          onClick={toggleUploadPopup}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Hủy
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 };

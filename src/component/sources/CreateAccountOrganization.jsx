@@ -80,8 +80,8 @@ const CreateAccountForm = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {success && <p style={{ color: 'green' }}>{success}</p>}
       {isMemberGroup6 && (
-        <form className='gap-4 flex flex-col' onSubmit={handleSubmit}>
-          <div className='mb-4 w-full flex flex-col'>
+        <form className='gap-4 flex flex-col bg-white rounded-lg p-6 w-[90%] max-w-lg h-[90%]' onSubmit={handleSubmit}>
+          <div className='mb-4 w-full flex flex-col '>
             <span>Tên tổ chức</span>
             <input className='p-2 bg-slate-200' type="text" name="name" placeholder="Name" onChange={handleChange} />
           </div>

@@ -57,7 +57,7 @@ const SemesterDetail = () => {
       }
     return (
         <div className="w-full h-full p-4">
-        <div className='w-full bg-red-500 fixed top-0 left-0 h-12'>
+        <div className='w-full bg-red-500 fixed top-0 left-0 h-12 z-50'>
                 <button className=' h-12 flex items-center mx-8 text-white font-bold' onClick={handleEventClick}>Quay lại</button>
         </div>
         

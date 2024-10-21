@@ -13,6 +13,7 @@ const Organization = () => {
   const [organization, setOrganization] = useState([]);
   const [listUser, setListUser] = useState([]);
   const token = localStorage.getItem('authToken');
+  const idAuth = localStorage.getItem('authID');
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [fileData, setFileData] = useState([]);
   const [fieldMapping, setFieldMapping] = useState({
@@ -107,7 +108,7 @@ const Organization = () => {
         setShowListUser(true);
       } else {
         console.error("Expected 'data' to be an array but received:", dataArray);
-        setError("Unexpected data format");
+        setError("Bạn không phải quản lý của đơn vị này");
       }
     } catch (error) {
       console.error('Error fetching user list:', error.response ? error.response.data : error.message);
@@ -199,7 +200,7 @@ const Organization = () => {
         {loading ? (
             <p>Loading...</p>
             ) : error ? (
-              <p>Error: {error}</p>
+              <p>{error}</p>
             ) : (
         
             <div className='h-full flex flex-col md:flex-row w-full mb-4'>
@@ -247,7 +248,7 @@ const Organization = () => {
               itemLayout="horizontal"
               dataSource={listUser}
               renderItem={(listUsers) => (
-                <List.Item onClick={toggleShowListUser} className=' hover:bg-white rounded-md bg-slate-100 mt-2'>
+                <List.Item className=' hover:bg-white rounded-md bg-slate-100 mt-2'>
                   <List.Item.Meta
                     className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
                     title={`${listUsers.last_name} ${listUsers.first_name}`}

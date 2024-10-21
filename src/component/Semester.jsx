@@ -21,7 +21,7 @@ const Semester = () => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleClickSemesDetail = (semesterId) => {
-    navigate(`/semester/${semesterId}`);
+    navigate(`/quanly/semester/${semesterId}`);
   };
 
   const handleAddEvent = () => {
