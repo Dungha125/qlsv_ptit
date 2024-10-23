@@ -10,6 +10,7 @@ const Organization = () => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [account, setAccount] = useState({});
   const [organization, setOrganization] = useState([]);
   const [listUser, setListUser] = useState([]);
   const token = localStorage.getItem('authToken');
@@ -20,6 +21,7 @@ const Organization = () => {
     username_list: '',
     role_list: '',
   });
+  const [currentOrganizationName, setCurrentOrganizationName] = useState("");
   const [selectedUnitId, setSelectedUnitId] = useState("");
   const [selectedOrga, setSelectedOrga] = useState("");
   const [showListUser, setShowListUser] = useState(false);
@@ -31,18 +33,61 @@ const Organization = () => {
 
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
+  const [selectedOrgId, setSelectedOrgId] = useState(null); // State để lưu ID của đơn vị được chọn
 
-  const toggleUploadPopup = () => {
+  const handleSelectChange = (e) => {
+    const selectedId = e.target.value;
+    const selectedOrgName = organization.find(org => org.id === selectedId)?.name || ""; // Find the organization name based on selected ID
+    setCurrentOrganizationName(selectedOrgName); // Update state with selected organization name
+    setSelectedOrgId(selectedId);
+    toggleShowListUser(selectedId, selectedOrgName); // Pass both selected ID and organization name
+  };
+
+  const handleButtonClick = () => {
+    if (selectedOrgId) {
+      toggleUploadPopup(selectedOrgId); // Gọi hàm upload với ID đã chọn
+    }
+  };
+
+
+  const toggleUploadPopup = (id) => {
+    setSelectedUnitId(id);
     setShowUploadPopup(!showUploadPopup);
   };
 
-  const handleUnitChange = (e) => {
-    setSelectedUnitId(e.target.value); 
-  };
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/auth/profile`, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json' 
+          }
+        });
+        const dataArray = response.data.data;
+        setAccount(dataArray);
+      } catch (error) {
+        console.error('Error fetching account data:', error.response ? error.response.data : error.message);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) { 
+      fetchData();
+    } else {
+      setError("No token found");
+      setLoading(false);
+    } 
+    return () => {};
+  }, [token]);
 
   useEffect(()=>{
     const fecthOrgani = async () => {
@@ -125,7 +170,8 @@ const Organization = () => {
   }, [currentPage, selectedOrga]);
 
 
-  const toggleShowListUser = (organizationId) => {
+  const toggleShowListUser = (organizationId, organizationName) => {
+    setCurrentOrganizationName(organizationName);
     setSelectedOrga(organizationId); 
     setCurrentPage(1);  
   };
@@ -196,80 +242,155 @@ const Organization = () => {
       <Sidebar setRefresh={setRefresh} />
 
       <div className="flex-1 p-4 h-screen md:ml-64">
-        <h1 className='text-4xl font-bold m-8'>Các đơn vị trực thuộc</h1>
-        {loading ? (
-            <p>Loading...</p>
-            ) : error ? (
-              <p>{error}</p>
-            ) : (
-        
-            <div className='h-full flex flex-col md:flex-row w-full mb-4'>
-         
-          <div className='mt-4 md:max-w-[30%] w-full px-4 h-auto'>
-            <div className='overflow-y-auto w-full max-h-screen'>
+      { idAuth == 1 ? (
+  <div id='membergroup6'>
+    <h1 className='text-4xl font-bold m-8'>Các đơn vị trực thuộc</h1>
+    {loading ? (
+      <p>Loading...</p>
+    ) : error ? (
+      <p>{error}</p>
+    ) : (
+      <div className='h-full flex flex-col md:flex-row w-full mb-4'>
+        <div className='mt-4 w-full px-4 h-auto'>
+          <div className='overflow-y-auto w-full max-h-screen'>
             {isMobile ? (
-                  <select 
-                    className="border rounded w-full  p-2"
-                    onChange={(e) => toggleShowListUser(e.target.value)}
-                  >
-                    <option value="">Chọn đơn vị</option>
-                    {organization.map((org) => (
-                      <option key={org.id} value={org.id}>
-                        {org.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-            <List
-              itemLayout="horizontal"
-              dataSource={organization}
-              renderItem={(organizations) => (
-                <List.Item onClick={() => toggleShowListUser(organizations.id)} className=' hover:bg-white rounded-md bg-slate-100 my-2'>
-                  <List.Item.Meta
-                    className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full '
-                    title={`${organizations.name}`}
-                    description={organizations.description}
-                  />
-                </List.Item>
-              )}/>
-            )}
-              </div>
-              <button
-                onClick={toggleUploadPopup}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 py-2 px-4 rounded  "
-              >
-                Upload File
-              </button>
-          </div>
-          {showListUser && (
-            <div className='h-full mx-4 mt-4 w-full rounded-xl bg-slate-50 p-4'>
-              <h1 className='mb-4 text-xl font-bold'>Danh sách nhân sự của đơn vị</h1>
+               <>
+               <select 
+                 className="border rounded w-full p-2"
+                 onChange={handleSelectChange}
+               >
+                 <option value="">Chọn đơn vị</option>
+                 {organization.map((org) => (
+                   <option key={org.id} value={org.id}>
+                     {org.name}
+                   </option>
+                 ))}
+               </select>
+               {selectedOrgId && ( // Chỉ hiển thị nút khi có đơn vị được chọn
+                 <button
+                   onClick={handleButtonClick}
+                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 py-2 px-4 rounded w-full"
+                 >
+                   Upload File
+                 </button>
+               )}
+             </>
+            ) : (
               <List
+                itemLayout="horizontal"
+                dataSource={organization}
+                renderItem={(organizations) => (
+                  <List.Item onClick={() => toggleShowListUser(organizations.id, organizations.name)} className='hover:bg-white min-w-[300px] rounded-md bg-slate-100 my-2'>
+                    <List.Item.Meta
+                      className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
+                      title={organizations.name}
+                      description={organizations.description || ""} // Fallback for description
+                    />
+                    <button
+                      onClick={() => toggleUploadPopup(organizations.id)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-2 py-2 px-4 rounded"
+                    >
+                      Upload File
+                    </button>
+                  </List.Item>
+                )}
+              />
+            )}
+          </div>
+          
+        </div>
+        {showListUser && (
+          <div className='h-full mx-4 mt-4 w-full rounded-xl bg-slate-50 p-4'>
+            <h1 className='mb-4 text-xl font-bold'>Danh sách nhân sự của {currentOrganizationName}</h1>
+            <List
               itemLayout="horizontal"
               dataSource={listUser}
               renderItem={(listUsers) => (
-                <List.Item className=' hover:bg-white rounded-md bg-slate-100 mt-2'>
+                <List.Item className='hover:bg-white rounded-md bg-slate-100 mt-2'>
                   <List.Item.Meta
                     className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
                     title={`${listUsers.last_name} ${listUsers.first_name}`}
-                    description = {`${listUsers.username}`}
+                    description={`${listUsers.username}`}
                   />
                 </List.Item>
-              )}/>
-              <div className='w-full flex justify-center mb-4'>
-                <Pagination
-                  current={currentPage}
-                  total={totalEvents}
-                  pageSize={10}
-                  onChange={handlePageChange}
-                  className="my-4 "
-                />
-          </div>
+              )}
+            />
+            <div className='w-full flex justify-center mb-4'>
+              <Pagination
+                current={currentPage}
+                total={totalEvents}
+                pageSize={10}
+                onChange={handlePageChange}
+                className="my-4"
+              />
             </div>
-          )          }
-       </div>
-            )}
-            {showUploadPopup && (
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+) : (
+  // Check if the user has organizations with role === 1
+  account.organizations && account.organizations.some(org => org.pivot.role === 1) ? (
+    <div>
+      <h1 className='text-4xl font-bold m-8'>Danh sách đơn vị quản lý</h1>
+      <List
+        itemLayout="horizontal"
+        dataSource={account.organizations.filter(org => org.pivot.role === 1)} 
+        renderItem={(org) => (
+          <List.Item  className='hover:bg-white rounded-md bg-slate-100 my-2'>
+            <List.Item.Meta
+              onClick={() => toggleShowListUser(org.id, org.name)}
+              className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
+              title={org.name}
+              description={org.description || ""} 
+            />
+          
+          <button
+          onClick={() => toggleUploadPopup(org.id)}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Upload File
+          </button>
+          </List.Item>
+        )}
+        
+      />
+      {showListUser && (
+          <div className='h-full mx-4 mt-4 w-full rounded-xl bg-slate-50 p-4'>
+            <h1 className='mb-4 text-xl font-bold'>Danh sách nhân sự của {currentOrganizationName}</h1>
+            <List
+              itemLayout="horizontal"
+              dataSource={listUser}
+              renderItem={(listUsers) => (
+                <List.Item className='hover:bg-white rounded-md bg-slate-100 mt-2'>
+                  <List.Item.Meta
+                    className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
+                    title={`${listUsers.last_name} ${listUsers.first_name}`}
+                    description={`${listUsers.username}`}
+                  />
+                </List.Item>
+              )}
+              
+            />
+
+            <div className='w-full flex justify-center mb-4'>
+              <Pagination
+                current={currentPage}
+                total={totalEvents}
+                pageSize={10}
+                onChange={handlePageChange}
+                className="my-4"
+              />
+            </div>
+          </div>
+        )}
+    </div>
+  ) : (
+    <p className='text-center m-8'>Không có đơn vị quản lý nào.</p> // Fallback message if no organizations are found
+  )
+)}
+  {showUploadPopup && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
       <div className='w-full flex justify-end'>
@@ -300,23 +421,6 @@ const Organization = () => {
       {fileData.length > 0 && (
           <div>
           <h3 className="text-lg font-bold mb-4">Mapping</h3>
-              <label className='block mb-2'>
-                Đơn vị
-              </label>
-              <select 
-                name="unit" 
-                value={selectedUnitId}
-                onChange={handleUnitChange}
-                className='border rounded w-full p-2'
-              >
-                <option value="">Chọn đơn vị</option>
-                {organization.map((org) => (
-                  <option key={org.id} value={org.id}>
-                    {org.name}
-                  </option>
-                ))}
-
-              </select>
           {Object.keys(fieldMapping).map((field) => (
             <div key={field} className="mb-4">
               

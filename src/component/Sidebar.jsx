@@ -216,7 +216,7 @@ const Sidebar = ({setRefresh}) => {
           {/* Hiển thị "Tổ chức" nếu role id === 1 */}
           {account.organizations && (account.organizations.some(org => org.pivot.role === 1) || account.member_group === 6) && (
             <li onClick={handleClickOrganization} className={`mb-4 p-2 rounded cursor-pointer ${location.pathname === '/quanly/organization' ? 'bg-white text-neutral-900 ' : 'bg-none hover:bg-gray-700'}`}>
-              Tổ chức
+              {account.organizations.some(org => org.pivot.role === 1) ? 'Đơn vị quản lý' : 'Tổ chức'}
             </li>
           )}
 
