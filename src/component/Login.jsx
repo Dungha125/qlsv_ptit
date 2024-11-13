@@ -45,7 +45,7 @@ const Login = () => {
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
           <div className='w-full bottom-0 right-0 absolute text-center text-xs mb-2'>
-      <span>Copyright@2024 Ver:2024.10.22 Đoàn thanh niên Học viện</span>
+      <span>Copyright@2024 Ver:2024.11.13 Đoàn thanh niên Học viện</span>
       <br></br>
       <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
     </div>
