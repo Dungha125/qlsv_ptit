@@ -83,7 +83,7 @@ const TracuuForm = () => {
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
       <div className='w-full bottom-0 absolute text-center text-xs my-1'>
-        <span>Copyright@2024 Ver:2024.11.13 Đoàn thanh niên Học viện</span>
+        <span>Copyright@2025 Ver:2025.01.06 Đoàn thanh niên Học viện</span>
         <br />
         <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
       </div>
@@ -111,7 +111,7 @@ const TracuuForm = () => {
               type="submit"
               value="Tra cứu"
               disabled={loading} 
-              className='hover:cursor-pointer py-1 px-2  bg-red-500 hover:bg-red-700 text-white font-bold rounded-lg'
+              className='hover:cursor-pointer py-1 px-2  bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-lg'
             />
           </div>
         </form>
