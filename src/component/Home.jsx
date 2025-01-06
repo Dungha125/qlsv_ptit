@@ -9,10 +9,10 @@ const Home = () => {
   
 
   return (
-    <div className='w-full h-full flex'>
+    <div className='w-full h-screen flex'>
       <Sidebar setRefresh={setRefresh} /> {/* Pass setRefresh as a prop */}
       
-      <div className="flex-1 p-4 md:ml-64">
+      <div className="flex-1 p-4 md:ml-64 h-screen">
         <div className='flex flex-col md:flex-row'>
           <ListEvent key={refresh} /> {/* Refresh when refresh state changes */}
           {userId == 1 && (

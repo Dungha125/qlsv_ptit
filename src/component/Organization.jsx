@@ -237,6 +237,28 @@ const Organization = () => {
       console.error('Error uploading data:', error.response ? error.response.data : error.message);
     }
   };
+
+  const deleteOrganization = async (organizationId) => {
+    setLoading(true); // Hiển thị trạng thái loading
+    try {
+      await axios.delete(`${API_BASE_URL}/organizations/${organizationId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      console.log(`Tổ chức ${organizationId} đã được xóa thành công.`);
+      setRefresh((prev) => !prev); // Làm mới dữ liệu bằng cách thay đổi state
+    } catch (error) {
+      console.error('Error deleting organization:', error.response ? error.response.data : error.message);
+      setError("Không thể xóa tổ chức này.");
+    } finally {
+      setLoading(false); // Kết thúc trạng thái loading
+    }
+  };
+
+
+
   return (
     <div className='w-full h-screen flex'>
       <Sidebar setRefresh={setRefresh} />
@@ -277,24 +299,43 @@ const Organization = () => {
              </>
             ) : (
               <List
-                itemLayout="horizontal"
-                dataSource={organization}
-                renderItem={(organizations) => (
-                  <List.Item onClick={() => toggleShowListUser(organizations.id, organizations.name)} className='hover:bg-white min-w-[300px] rounded-md bg-slate-100 my-2'>
-                    <List.Item.Meta
-                      className='px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full'
-                      title={organizations.name}
-                      description={organizations.description || ""} // Fallback for description
-                    />
-                    <button
-                      onClick={() => toggleUploadPopup(organizations.id)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-2 py-2 px-4 rounded"
-                    >
-                      Upload File
-                    </button>
-                  </List.Item>
-                )}
-              />
+              itemLayout="horizontal"
+              dataSource={organization}
+              renderItem={(organizations) => (
+                <List.Item
+                  onClick={(e) => {
+                    // Kiểm tra xem sự kiện có phải đến từ nút "Delete" không
+                    if (e.target.tagName !== 'BUTTON') {
+                      toggleShowListUser(organizations.id, organizations.name);
+                    }
+                  }}
+                  className="hover:bg-white min-w-[300px] rounded-md bg-slate-100 my-2"
+                >
+                  <List.Item.Meta
+                    className="px-4 rounded-md border-b-1 border-solid border-neutral-500 w-full"
+                    title={organizations.name}
+                    description={organizations.description || ""} // Fallback for description
+                  />
+                  <button
+                    onClick={() => toggleUploadPopup(organizations.id)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-2 py-2 px-4 rounded"
+                  >
+                    Upload File
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Ngừng sự kiện tiếp tục khi nhấn vào nút "Delete"
+                      if (window.confirm(`Are you sure you want to delete ${organizations.name}?`)) {
+                        deleteOrganization(organizations.id); // Gọi hàm xóa tổ chức và làm mới dữ liệu
+                      }
+                    }}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Delete
+                  </button>
+                </List.Item>
+              )}
+            />
             )}
           </div>
           

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const AddEvent = ({ onAddEvent }) => {
+const AddEvent = ({ onAddEvent, onClose }) => {
     const [eventName, setEventName] = useState('');
     const [eventStart, setEventStart] = useState('');
     const [eventFinish, setEventFinish] = useState('');
@@ -11,13 +11,12 @@ const AddEvent = ({ onAddEvent }) => {
     const [eventDescription, setEventDescription] = useState('');
     const [message, setMessage] = useState('');
     const [semesters, setSemesters] = useState([]);
-      
+    const [loading, setLoading] = useState(false);
 
     const token = localStorage.getItem('authToken');
-
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-
+    // Fetch semesters
     useEffect(() => {
         const fetchSemesters = async () => {
             try {
@@ -27,21 +26,18 @@ const AddEvent = ({ onAddEvent }) => {
                         Accept: 'application/json',
                     },
                 });
-                setSemesters(response.data.data); // Điều chỉnh dựa trên cấu trúc dữ liệu của API
+                setSemesters(response.data.data || []);
             } catch (error) {
                 console.error('Error fetching semesters:', error);
                 setMessage('Error fetching semesters.');
             }
         };
-    
         fetchSemesters();
-    }, [token]);
-
+    }, [token, API_BASE_URL]);
 
     const handleCreateEvent = async (e) => {
         e.preventDefault();
 
-       
         const formatDateTime = (date) => {
             const d = new Date(date);
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
@@ -52,18 +48,13 @@ const AddEvent = ({ onAddEvent }) => {
 
         const semesterId = parseInt(eventSemester, 10);
         if (isNaN(semesterId) || semesterId <= 0) {
-            setMessage('Invalid semester ID. Please enter a valid number.');
+            setMessage('Invalid semester ID. Please select a valid semester.');
             return;
         }
 
-  
-        const sanitizeAlphaSpaces = (text) => {
-            return text.replace(/[^a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚỤĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơạảấầẩẫậắằẵặẹẻẽềếểễệỉịọỏốồổỗộớờởỡợụưủứừửữựỳỵýỷỹĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỄỬỮỰỲỴÝỶỸ\s0-9,;.!?(){}[\]'"-/_@#&*^%~`]/g, ''); //chưa thêm dấu đặc biệt được
-            
-        };
-
+        setLoading(true);
         try {
-            const response = await axios.post(
+            await axios.post(
                 `${API_BASE_URL}/events`,
                 {
                     name: eventName,
@@ -82,10 +73,17 @@ const AddEvent = ({ onAddEvent }) => {
                     },
                 }
             );
-            setMessage('Event created successfully!');
-            console.log('Response:', response.data);
-            onAddEvent();
+            setMessage('');
+            setLoading(false);
+
+            // Gọi hàm onAddEvent để thông báo sự kiện đã được thêm
+            if (onAddEvent) onAddEvent();
+
+            // Tắt popup và reload trang
+            if (onClose) onClose();
+            window.location.reload();
         } catch (error) {
+            setLoading(false);
             if (error.response) {
                 const { data } = error.response;
                 let errorMessage = 'Error creating event: ';
@@ -98,14 +96,10 @@ const AddEvent = ({ onAddEvent }) => {
                     }
                 }
                 setMessage(errorMessage);
-                console.error('Error response data:', data);
-                console.error('Error response status:', error.response.status);
             } else if (error.request) {
-                setMessage('Error creating event: No response from server');
-                console.error('Error request:', error.request);
+                setMessage('Error creating event: No response from server.');
             } else {
                 setMessage('Error creating event: ' + error.message);
-                console.error('General error:', error.message);
             }
         }
     };
@@ -126,7 +120,6 @@ const AddEvent = ({ onAddEvent }) => {
                         placeholder='Enter event name'
                     />
                 </div>
-
                 <div className='mb-4'>
                     <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventOrganization'>
                         Đơn vị tổ chức
@@ -140,7 +133,6 @@ const AddEvent = ({ onAddEvent }) => {
                         placeholder='Enter event organization'
                     />
                 </div>
-
                 <div className='mb-4'>
                     <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventDescription'>
                         Chi tiết
@@ -153,7 +145,6 @@ const AddEvent = ({ onAddEvent }) => {
                         placeholder='Enter event description'
                     />
                 </div>
-
                 <div className='mb-4'>
                     <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventAddress'>
                         Địa điểm
@@ -167,7 +158,6 @@ const AddEvent = ({ onAddEvent }) => {
                         placeholder='Enter event address'
                     />
                 </div>
-
                 <div className='mb-4'>
                     <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventSemester'>
                         Học kỳ
@@ -178,19 +168,14 @@ const AddEvent = ({ onAddEvent }) => {
                         onChange={(e) => setEventSemester(e.target.value)}
                         className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     >
-                        <option value="">Chọn học kỳ đang học</option>
-                        {Array.isArray(semesters) && semesters.length > 0 ? (
-                                semesters.map((semester) => (
-                                    <option key={semester.id} value={semester.id}>
-                                        {semester.name}
-                                    </option>
-                                ))
-                            ) : (
-                                <option disabled>Không có học kỳ nào</option>
-                            )}
+                        <option value=''>Chọn học kỳ đang học</option>
+                        {semesters.map((semester) => (
+                            <option key={semester.id} value={semester.id}>
+                                {semester.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
-
                 <div className='mb-4'>
                     <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventStart'>
                         Thời gian bắt đầu
@@ -203,7 +188,6 @@ const AddEvent = ({ onAddEvent }) => {
                         className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     />
                 </div>
-
                 <div className='mb-4'>
                     <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='eventFinish'>
                         Thời gian kết thúc
@@ -216,19 +200,17 @@ const AddEvent = ({ onAddEvent }) => {
                         className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     />
                 </div>
-
                 <button
                     type='submit'
                     className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                    disabled={loading}
                 >
-                    Tạo sự kiện
+                    {loading ? 'Đang tạo...' : 'Tạo sự kiện'}
                 </button>
+                {message && <p className='mt-4 text-red-500'>{message}</p>}
             </form>
-
-           
         </div>
     );
 };
 
 export default AddEvent;
-
