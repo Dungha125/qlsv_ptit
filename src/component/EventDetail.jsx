@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ListUserParticipate from './sources/ListUserParticipate';
 import Papa from 'papaparse'; // CSV parsing
-import * as XLSX from 'xlsx'; // XLSX parsing
+import * as XLSX from 'xlsx'; 
 import { Alert } from 'antd';
 
 const EventDetail = () => {
@@ -53,10 +53,9 @@ const EventDetail = () => {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',
-        },
-      });
-      if (Array.isArray(response.data.data)) {
-        setParticipants(response.data.data);
+        },});
+        if (Array.isArray(response.data.data)) {
+          setParticipants(response.data.data);
       } else {
         setError('Unexpected data format');
       }

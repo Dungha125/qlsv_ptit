@@ -45,7 +45,7 @@ const Login = () => {
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
           <div className='w-full bottom-0 right-0 absolute text-center text-xs mb-2'>
-      <span>Copyright@2025 Ver:2025.01.06 Đoàn thanh niên Học viện</span>
+      <span>Copyright@2025 Ver:2025.01.20 Đoàn thanh niên Học viện</span>
       <br></br>
       <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
     </div>
@@ -55,7 +55,7 @@ const Login = () => {
       </span>
       
       <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4 md:p-12'>
-        <h1 className='text-2xl w-full text-center font-bold text-neutral-800'>Đăng nhập</h1>
+      <h1 className='text-[#333333] text-xl font-bold mt-4 w-full text-center'>ĐĂNG NHẬP</h1>
         {errorMess && <p className='text-red-600 text-center mb-4'>{errorMess}</p>}
         
         <form onSubmit={submitForm} className='w-full'>
@@ -89,13 +89,12 @@ const Login = () => {
 
           <button 
             type='submit'
-            className='bg-red-600 w-full px-4 py-2 text-white rounded-md mt-4'>
+            className='bg-blue-600 w-full px-4 py-2 text-white rounded-md mt-4'>
             Đăng nhập
           </button>
         </form>
       </div>
 
-      <img src={backlogin} alt="backlogin" className='absolute object-cover w-screen h-screen opacity-30 -z-[10]' />
     </div>
   );
 };

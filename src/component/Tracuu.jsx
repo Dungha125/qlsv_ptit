@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { logologin, backlogin, logodoan } from '../assets'; 
+import { logodoan, logoptit } from '../assets';
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { List, Spin, Pagination } from 'antd';
 
 const TracuuForm = () => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
-  const [name, setName] = useState(""); 
+  const {executeRecaptcha} = useGoogleReCaptcha();
+  const [name, setName] = useState("");
   const [errorMess, setErrorMess] = useState(''); 
   const [loading, setLoading] = useState(false);
-  const [events, setEvents] = useState([]); // Lưu các sự kiện người dùng đã tham gia
-  const [user, setUser] = useState(null); // Lưu thông tin người dùng mới nhất
-  const [currentPage, setCurrentPage] = useState(1); // Số trang hiện tại
-  const [pageSize, setPageSize] = useState(10); // Số lượng sự kiện trên mỗi trang
-  const [totalEvents, setTotalEvents] = useState(0); // Tổng số sự kiện
+  const [events, setEvents] = useState([]);
+  const [user, setUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalEvents, setTotalEvents] = useState(0);
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  // Lấy dữ liệu khi thay đổi trang
-  useEffect(() => {
-    if (name) {
+  useEffect(()=>{
+    if(name){
       fetchData();
     }
   }, [currentPage, pageSize]);
 
-  const fetchData = async () => {
+    const fetchData = async () => {
     setLoading(true);
     setErrorMess('');
     setEvents([]);
@@ -80,44 +79,38 @@ const TracuuForm = () => {
     setPageSize(pageSize); // Cập nhật số lượng sự kiện trên mỗi trang nếu thay đổi
   };
 
+
+
   return (
-    <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
-      <div className='w-full bottom-0 absolute text-center text-xs my-1'>
-        <span>Copyright@2025 Ver:2025.01.06 Đoàn thanh niên Học viện</span>
-        <br />
-        <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
+    /* TRANG TRA CUU */
+    <div className='w-full h-screen bg-[#eeeeee] flex items-center justify-start flex-col md:flex-row gap-4'>
+      <div className='max-w-[550px] h-full flex justify-center items-center shadow-md left-0 px-4'>
+        <div className='w-full md:w-[500px] h-[250px] rounded-md border-2 border-gray-400 flex flex-col justify-center items-center'>
+            <span className='w-full h-[40px] flex gap-5 justify-center items-center'>
+                <img src={logoptit} width={40} alt="logoptit" />
+                <img src={logodoan} width={45} alt="logodoan" />
+            </span>
+            <h1 className='text-[#333333] text-xl font-bold mt-4 w-full text-center'>TRA CỨU THAM GIA CÔNG TÁC ĐOÀN</h1>
+            <form onSubmit={handleSubmit} className='w-full px-4 mt-4 flex flex-col items-center'>
+                <input 
+                  type="text" 
+                  placeholder='Mã sinh viên' 
+                  className='w-full px-4 py-1 bg-white border-2 border-gray-400 rounded-md text-[#333333]' 
+                  id="name"
+                  name="name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                  />
+              <input
+                type='submit'
+                value="Tra cứu"
+                disabled={loading}
+                className='rounded-md bg-blue-600 w-[6rem] h-[2rem] mt-4 text-[#ffffff] font-medium hover:bg-blue-700'/>
+            </form>
+        </div>
       </div>
-      <span className='flex flex-row gap-5'>
-        <img src={logologin} width={50} height={50} alt="logo ptit" className='mb-[2rem] object-contain' />
-        <img src={logodoan} width={60} height={60} alt="logo doan" className='mb-[2rem] object-contain' />
-      </span>
-
-      <div className='md:w-[500px] w-full h-auto rounded-xl shadow-lg flex flex-col items-center justify-center bg-slate-100 p-4'>
-        <h1 className='text-2xl w-full text-center font-bold text-neutral-800 mb-4'>Tra cứu hoạt động Đoàn</h1>
-        <form onSubmit={handleSubmit} className='flex justify-center items-center w-[70%]'>
-          <div className='flex items-center flex-col w-full'> 
-            <input
-              type="text"
-              id="name"
-              placeholder="Nhập mã sinh viên"
-              name="name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className='p-2 w-full mb-2'
-              required
-            />
-
-            <input
-              type="submit"
-              value="Tra cứu"
-              disabled={loading} 
-              className='hover:cursor-pointer py-1 px-2  bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-lg'
-            />
-          </div>
-        </form>
-      </div>
-
-      {loading ? (
+        {loading ? (
         <Spin size="large" /> 
       ) : (
         <>
@@ -128,7 +121,7 @@ const TracuuForm = () => {
           )}
 
           {user && (
-            <div className='w-full md:w-[80%] flex flex-col bg-white rounded-lg p-2 mb-4 overflow-y-auto'>
+            <div className='w-full h-screen flex flex-col bg-white p-2 my-4 overflow-y-auto'>
               <div className='w-full h-[80%] mt-4 px-4'>
                 <p className='mb-2'><strong>Thông tin tra cứu:</strong></p>
                 <p className='mb-2'>Họ và tên: {user?.last_name || ''} {user?.first_name || ''}</p>
@@ -170,12 +163,9 @@ const TracuuForm = () => {
           )}
         </>
       )}
-
-      <img src={backlogin} alt="backlogin" className='absolute object-fill w-full h-full opacity-30 -z-[10]' />
     </div>
   );
 };
-
 const Tracuu = () => {
   return (
     <GoogleReCaptchaProvider reCaptchaKey="6LdGg1kqAAAAACjQRHCtqK71x9-NjCW4qAFCgssh">
@@ -183,5 +173,4 @@ const Tracuu = () => {
     </GoogleReCaptchaProvider>
   );
 };
-
-export default Tracuu;
+export default Tracuu
