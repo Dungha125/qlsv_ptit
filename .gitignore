@@ -27,4 +27,4 @@ src/assets/credentials.json
 .env
 
 /dist
-.idea
+.ideas
