@@ -10,6 +10,7 @@ import Semester from './component/Semester.jsx';
 import SemesterDetail from './component/SemesterDetail.jsx';
 import Organization from './component/Organization.jsx';
 import Tracuu from './component/Tracuu.jsx';
+import Vanphongdoan from './component/Vanphongdoan.jsx';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/quanly/semester" element={<Semester/>} />
         <Route path="/quanly/semester/:semesterId" element={<SemesterDetail />} />
         <Route path="/quanly/organization" element={<Organization />} />
+        <Route path="/vpdptit" element={<Vanphongdoan />}/>
         <Route path="/" element={<Tracuu />} />
       </Routes>
     </Router>

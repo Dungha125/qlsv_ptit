@@ -104,7 +104,7 @@ const ListEvent = ({ setUser }) => {
   };
 
   return (
-    <div className="w-full flex border-r-2">
+    <div className="w-full h-screen flex border-r-2">
       <div className="flex-1 p-8">
         <h1 className="w-full text-2xl font-bold mb-4">Sự kiện</h1>
         {loading ? (
@@ -113,7 +113,7 @@ const ListEvent = ({ setUser }) => {
           <p>Error: {error}</p>
         ) : (
           <div className="w-full flex flex-col">
-            <div className="w-full h-[80%]">
+            <div className="w-full">
               <List
                 itemLayout="horizontal"
                 dataSource={events}

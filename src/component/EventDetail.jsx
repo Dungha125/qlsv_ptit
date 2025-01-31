@@ -24,6 +24,9 @@ const EventDetail = () => {
   const UserId = localStorage.getItem('authID');
   const navigate = useNavigate();
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const [showPopupStatus, setShowPopupStatus] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -121,7 +124,9 @@ const EventDetail = () => {
       );
       
       console.log("Response from API:", response.data); // Log the response
-  
+      setPopupMessage("Tải danh sách thành công!");
+      setIsSuccess(true);
+      setShowPopup(true);
       setShowUploadPopup(false);
 
       // Refetch participants after successfully uploading
@@ -137,6 +142,9 @@ const EventDetail = () => {
       } else {
         console.error("No response from server");
       }
+      setPopupMessage("Tải danh sách không thành công, vui lòng xem lại data");
+      setIsSuccess(false);
+      setShowPopup(true);
     }
   };
 
@@ -150,6 +158,11 @@ const EventDetail = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  if (showPopup) {
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 3000); // Close after 3 seconds
+  }
 
   return (
     <div className="p-4">
@@ -215,6 +228,21 @@ const EventDetail = () => {
             </div>
         </div>
       )}
+      {showPopup && (
+        <div
+          className={`fixed top-5 right-5 bg-opacity-100 p-5 rounded-lg text-white text-center z-50 ${
+            isSuccess ? 'bg-green-500' : 'bg-red-500'
+          }`}
+          onClick={() => setShowPopup(false)} // Close on click
+        >
+          <div className="popup-content">
+            <p>{popupMessage}</p>
+          </div>
+        </div>
+      )}
+
+
+
     </div>
   );
 };

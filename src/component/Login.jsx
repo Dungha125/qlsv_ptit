@@ -94,7 +94,7 @@ const Login = () => {
           </button>
         </form>
       </div>
-
+    <img src={backlogin} alt="Tra cứu thông tin" className='object-cover absolute -z-50 h-screen w-full' />
     </div>
   );
 };

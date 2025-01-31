@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { logodoan, logoptit } from '../assets';
+import { logodoan, logoptit, backlogin } from '../assets';
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { List, Spin, Pagination } from 'antd';
 
@@ -83,13 +83,9 @@ const TracuuForm = () => {
 
   return (
     /* TRANG TRA CUU */
-    <div className='w-full h-screen bg-[#eeeeee] flex items-center justify-start flex-col md:flex-row gap-4'>
-      <div className='max-w-[550px] h-full flex justify-center items-center shadow-md left-0 px-4'>
-        <div className='w-full md:w-[500px] h-[250px] rounded-md border-2 border-gray-400 flex flex-col justify-center items-center'>
-            <span className='w-full h-[40px] flex gap-5 justify-center items-center'>
-                <img src={logoptit} width={40} alt="logoptit" />
-                <img src={logodoan} width={45} alt="logodoan" />
-            </span>
+    <div className='w-full h-screen flex items-center justify-start flex-col md:flex-row gap-4'>
+      <div className='max-w-[550px] h-full flex justify-center items-center left-0 px-4 z-20'>
+        <div className='w-full md:w-[500px] h-[250px] rounded-2xl border-2 border-gray-400 flex flex-col justify-center items-center bg-[#faf7f7] shadow-lg'>
             <h1 className='text-[#333333] text-xl font-bold mt-4 w-full text-center'>TRA CỨU THAM GIA CÔNG TÁC ĐOÀN</h1>
             <form onSubmit={handleSubmit} className='w-full px-4 mt-4 flex flex-col items-center'>
                 <input 
@@ -109,7 +105,32 @@ const TracuuForm = () => {
                 className='rounded-md bg-blue-600 w-[6rem] h-[2rem] mt-4 text-[#ffffff] font-medium hover:bg-blue-700'/>
             </form>
         </div>
+        
       </div>
+
+      {!user && !loading && !errorMess && (
+        <div className='w-full md:w-[60%] h-screen flex flex-col justify-between items-center bg-[#eeeeee] p-4'>
+          <div className='text-center z-10'>
+            <h2 className='text-xs md:text-xl font-bold text-blue-500'>HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG</h2>
+            <p className='text-xs md:text-xl font-bold text-blue-500'>ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH HỌC VIỆN</p>
+          </div>
+          <div className='text-center z-10'>
+            <span className='w-full h-[40px] flex gap-5 justify-center items-center mb-4'>
+                <img src={logoptit} width={40} alt="logoptit" />
+                <img src={logodoan} width={45} alt="logodoan" />
+            </span>
+            <h2 className='text-base md:text-2xl font-semibold text-gray-700'>Nhập mã sinh viên để tra cứu</h2>
+            <p className='text-gray-500 mt-2'>Bạn có thể tra cứu thông tin về hoạt động đoàn mà mình đã tham gia.</p>
+          </div>
+          <div className='text-center z-10'>
+            <h2 className='text-xs md:text-sm font-base text-gray-700'>Copyright@2025 Ver:2025.01.20 Đoàn thanh niên Học viện</h2>
+            <p className='text-xs md:text-sm font-base text-gray-700'>Created by Liên chi Đoàn Khoa CNTT1-PTIT</p>
+          </div>
+          
+        </div>
+      )}
+      <img src={backlogin} alt="Tra cứu thông tin" className='object-cover absolute -z-5 h-screen w-full scale-x-[-1]' />
+      
         {loading ? (
         <Spin size="large" /> 
       ) : (
@@ -121,7 +142,7 @@ const TracuuForm = () => {
           )}
 
           {user && (
-            <div className='w-full h-screen flex flex-col bg-white p-2 my-4 overflow-y-auto'>
+            <div className='w-full h-screen flex flex-col bg-white p-2 my-4 overflow-y-auto z-30 border-l-2'>
               <div className='w-full h-[80%] mt-4 px-4'>
                 <p className='mb-2'><strong>Thông tin tra cứu:</strong></p>
                 <p className='mb-2'>Họ và tên: {user?.last_name || ''} {user?.first_name || ''}</p>
@@ -163,6 +184,7 @@ const TracuuForm = () => {
           )}
         </>
       )}
+
     </div>
   );
 };
@@ -170,6 +192,7 @@ const Tracuu = () => {
   return (
     <GoogleReCaptchaProvider reCaptchaKey="6LdGg1kqAAAAACjQRHCtqK71x9-NjCW4qAFCgssh">
       <TracuuForm />
+      
     </GoogleReCaptchaProvider>
   );
 };
