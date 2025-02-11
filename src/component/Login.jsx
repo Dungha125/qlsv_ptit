@@ -34,18 +34,18 @@ const Login = () => {
         localStorage.setItem('authID', AuthId);
         navigate('/quanly/home');
       } else {
-        setErrorMess('Invalid credentials');
+        setErrorMess('Lỗi xác thực');
       }
     } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMess('Login failed. Please try again.');
+      console.error('Lỗi đăng nhập:', error);
+      setErrorMess('Đăng nhập thất bại. Vui lòng thử lại!');
     }
   };
 
   return (
     <div className='w-full h-[100vh] flex flex-col items-center justify-center gap-4 p-[2rem] relative'>
           <div className='w-full bottom-0 right-0 absolute text-center text-xs mb-2'>
-      <span>Copyright@2025 Ver:2025.01.20 Đoàn thanh niên Học viện</span>
+      <span>Copyright@2025 Ver:2025.02.04 Đoàn thanh niên Học viện</span>
       <br></br>
       <span>Created by Liên chi Đoàn Khoa CNTT1-PTIT</span>
     </div>

@@ -118,7 +118,7 @@ const Organization = () => {
       fecthOrgani();
 
     }else{
-      setError("No token found");
+      setError("Lỗi thực thi");
       setLoading(false);
     }
     return ()=>{
@@ -210,33 +210,40 @@ const Organization = () => {
 
   // Submit mapped data to API
   const handleSubmit = async () => {
+    // Kiểm tra điều kiện để ẩn role_list
+    const shouldHideRoleList =
+      account.organizations &&
+      account.organizations.some((org) => org.pivot.role === 1);
+  
     const mappedUsers = fileData.map((row) => ({
-      username_list: row[fieldMapping.username_list],
-      role_list: row[fieldMapping.role_list]
+      username_list: row[fieldMapping.username_list] || "", // Nếu không có thì để trống
+      role_list: shouldHideRoleList ? "5" : row[fieldMapping.role_list] || "" // Nếu bị ẩn thì là "5"
     }));
-
+  
     try {
       const response = await axios.post(
         `${API_BASE_URL}/organizations/${selectedUnitId}/store_student`,
         { 
           username_list: mappedUsers.map(user => user.username_list),
-          role_list: mappedUsers.map(user => user.role_list[0]) // Extract role list array properly
+          role_list: mappedUsers.map(user => user.role_list) // Không dùng `[0]` vì role_list là string
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
         }
       );
-      console.log('API Response:', response.data);
+  
+      console.log("API Response:", response.data);
       setRefresh((prev) => !prev);
-      toggleUploadPopup(); // Close the popup after success
+      toggleUploadPopup(); // Đóng popup sau khi thành công
     } catch (error) {
-      console.error('Error uploading data:', error.response ? error.response.data : error.message);
+      console.error("Error uploading data:", error.response ? error.response.data : error.message);
     }
   };
+  
 
   const deleteOrganization = async (organizationId) => {
     setLoading(true); // Hiển thị trạng thái loading
@@ -257,6 +264,15 @@ const Organization = () => {
     }
   };
 
+  const shouldHideRoleList =
+    account.organizations &&
+    account.organizations.some((org) => org.pivot.role === 1);
+
+  useEffect(() => {
+    if (shouldHideRoleList) {
+      setFieldMapping((prev) => ({ ...prev, role_list: "5" }));
+    }
+  }, [account]);
 
 
   return (
@@ -460,27 +476,40 @@ const Organization = () => {
 
       {/* Field Mapping */}
       {fileData.length > 0 && (
-          <div>
-          <h3 className="text-lg font-bold mb-4">Mapping</h3>
-          {Object.keys(fieldMapping).map((field) => (
-            <div key={field} className="mb-4">
-              
-              <label className="block mb-2">{field}</label>
-              <select
-                name={field}
-                value={fieldMapping[field]}
-                onChange={handleMappingChange}
-                className="border rounded w-full p-2"
-              >
-                <option value="">Select a field</option>
-                {Object.keys(fileData[0]).map((fileField) => (
-                  <option key={fileField} value={fileField}>
-                    {fileField}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
+           <div>
+           <h3 className="text-lg font-bold mb-4">Mapping</h3>
+           {Object.keys(fieldMapping).map((field) => {
+             // Ẩn trường role_list nếu điều kiện đúng
+             if (
+               field === 'role_list' &&
+               account.organizations &&
+               account.organizations.some(org => org.pivot.role === 1)
+             ) {
+               return null;
+             }
+ 
+             return (
+               <div key={field} className="mb-4">
+                 <label className="block mb-2">{field}</label>
+                 <select
+                   name={field}
+                   value={fieldMapping[field]}
+                   onChange={(e) =>
+                     setFieldMapping({ ...fieldMapping, [field]: e.target.value })
+                   }
+                   className="border rounded w-full p-2"
+                 >
+                   <option value="">Select a field</option>
+                   {Object.keys(fileData[0]).map((fileField) => (
+                     <option key={fileField} value={fileField}>
+                       {fileField}
+                     </option>
+                   ))}
+                 </select>
+               </div>
+             );
+           })}
+        
           <button
             onClick={handleSubmit}
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
