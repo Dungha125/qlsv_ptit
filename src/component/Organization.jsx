@@ -16,9 +16,10 @@ const Organization = () => {
   const token = localStorage.getItem('authToken');
   const idAuth = localStorage.getItem('authID');
   const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [popup, setPopup] = useState({ show: false, type: '', text: '' });
   const [fileData, setFileData] = useState([]);
   const [fieldMapping, setFieldMapping] = useState({
-    username_list: '',
+    username: '',
     role_list: '',
   });
   const [currentOrganizationName, setCurrentOrganizationName] = useState("");
@@ -54,6 +55,11 @@ const Organization = () => {
     setSelectedUnitId(id);
     setShowUploadPopup(!showUploadPopup);
   };
+
+  const showPopup = (type, text) => {
+    setPopup({ show: true, type, text });
+    setTimeout(() => setPopup({ show: false, type: '', text: '' }), 3000);
+};
 
 
 
@@ -216,7 +222,7 @@ const Organization = () => {
       account.organizations.some((org) => org.pivot.role === 1);
   
     const mappedUsers = fileData.map((row) => ({
-      username_list: row[fieldMapping.username_list] || "", // Nếu không có thì để trống
+      username_list: row[fieldMapping.username] || "", // Nếu không có thì để trống
       role_list: shouldHideRoleList ? "5" : row[fieldMapping.role_list] || "" // Nếu bị ẩn thì là "5"
     }));
   
@@ -236,11 +242,15 @@ const Organization = () => {
         }
       );
   
-      console.log("API Response:", response.data);
-      setRefresh((prev) => !prev);
+      showPopup('success', 'Đã thêm nhân sự thành công!');
+      setTimeout(() => {
+        setRefresh((prev) => !prev);
       toggleUploadPopup(); // Đóng popup sau khi thành công
+    }, 1500);
+      
     } catch (error) {
       console.error("Error uploading data:", error.response ? error.response.data : error.message);
+      showPopup('error', errorMessage);
     }
   };
   
@@ -473,6 +483,12 @@ const Organization = () => {
         onChange={handleFileUpload}
         className="mb-4"
       />
+
+        {popup.show && (
+                <div className={`fixed top-10 right-10 p-4 rounded shadow-md text-white ${popup.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                    {popup.text}
+                </div>
+            )}
 
       {/* Field Mapping */}
       {fileData.length > 0 && (
